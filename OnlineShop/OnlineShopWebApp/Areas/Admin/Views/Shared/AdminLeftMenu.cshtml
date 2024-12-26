@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Панель администратора";
+}
+<div class="PanelAdmin list-group list-group-flush d-block position-static mx-0 shadow-lg">
+    <a class="AdminLeft list-group-item list-group-item-action" 
+       asp-area="Admin"
+       asp-controller="OrderManagment"
+       asp-action="Index"><b style="color:red">Категории</b></a>
+    <a class="AdminLeft list-group-item list-group-item-action"
+       asp-area="admin"
+       asp-controller="OrderManagment"
+       asp-action="Index">Заказы</a>
+    <a class="AdminLeft list-group-item list-group-item-action"
+       asp-area="admin"
+       asp-controller="UserManagment"
+       asp-action="Index">Пользователи</a>
+    <a class="AdminLeft list-group-item list-group-item-action" 
+       asp-area="admin"
+       asp-controller="RoleManagment"
+       asp-action="Index">Роли</a>
+    <a class="AdminLeft list-group-item list-group-item-action"
+       asp-area="admin"
+       asp-controller="ProductManagment"
+       asp-action="Index">Продукты</a>
+</div>
+	
+
+

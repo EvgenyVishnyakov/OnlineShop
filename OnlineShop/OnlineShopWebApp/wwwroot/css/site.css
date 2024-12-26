@@ -1,0 +1,126 @@
+
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }  
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+header{
+    position:sticky;
+}
+
+body {
+  margin-bottom: 60px;  
+  
+}
+
+footer {
+    position: fixed;
+    bottom: 5%;
+}
+
+.field-validation-error {
+    display: none;
+}
+
+.input-validation-error {
+    border-color: red;
+}
+
+    .input-validation-error + .field-validation-error {
+        display: block;
+        color: red;
+    }
+
+.navbar-bs-collapse {
+    justify-content: flex-end;
+    background-color: aqua
+}
+
+.nav-item {
+    display: inline;
+    margin-right: 50px;
+}
+
+.nav-item:last-child{
+    margin-right:0px;
+}
+
+.nav-link{
+    color: black;
+    font-style:italic;    
+}
+
+    .nav-link:hover {        
+        color: red;
+        text-shadow: 0 0 1px black;       
+    }
+
+.AdminLeft {
+    margin-right: 10px;
+    background-color: #ffc766;
+}
+
+.MainLeft {
+    background-color:moccasin;
+}
+
+.list-group-item:hover {
+    color: red;
+    text-shadow: 0 0 1px black;
+    margin-right: 100px;
+}
+
+.list-group-item {  
+    margin-right: 10px;
+}
+
+
+.progress-bar-animated{
+    block-size:330px;
+}
+
+.callMe {
+    margin-right: 0px;
+    margin-bottom: 50px;   
+}
+
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ellipsis:hover {
+        white-space: normal;
+        text-overflow: clip;
+        overflow: visible;
+    }
+
+.nav-item dropdown {
+    position:  relative
+}
+
+.dropdown-toggle, dropdown-item {
+    color: black;
+    font-style: italic;
+}
+
+    .dropdown-toggle, dropdown-item:hover {
+        color: black;
+        text-shadow: 0 0 1px red;
+    }

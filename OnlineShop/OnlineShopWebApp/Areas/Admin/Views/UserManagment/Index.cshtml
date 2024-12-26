@@ -1,0 +1,91 @@
+﻿@model List<UserVM>
+
+    @{
+    ViewData["Title"] = "Форма администратора";
+}
+
+<div class="сol text-center">
+    <h2>Список пользователей</h2>
+</div>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="my-4" style="margin-right: 100px;">
+            @await Html.PartialAsync("AdminLeftMenu")
+        </div>
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="сol">
+            <div><h1>Списка пользователей пока нет!</h1></div>
+        </div>
+    }
+    else
+    {
+        <div class="col-7">
+            <div class="table">
+                <table class="text-center">
+                    <tr class="head">
+                        <th scope="col"><p style="align-content: center; width: 280px"><b>Email</b></p></th>                        
+                        <th scope="col"><p style="align-content: center; width: 150px"><b>Телефон</b></p></th>
+                    </tr>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr class="user-select-all">
+                            <td>
+                                <a class="btn btn-outline-info" style=color: black"
+                                   asp-area="Admin"
+                                   asp-controller="UserManagment"
+                                   asp-action="Detail"
+                                   asp-route-userId="@Model[i].UserId">
+                                    @Model[i].Login
+                                </a>
+                            </td>
+                            <td scope="row" style="height:10px; width: 30px">@Model[i].Login</td>                            
+                            <td scope="row" style="height:10px; width: 30px">@Model[i].PhoneNumber</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    }
+    <div class="col align-content-end">
+        <a class="btn btn-primary" role="button"
+           asp-area="Admin"
+           asp-controller="UserManagment"
+           asp-action="Add">Добавить пользователя</a>
+    </div>
+</div>
+
+
+
+
+
+<!-- service_style -->
+<style>
+    body {
+        font-family: Cambria,Verdana,sans-serif;
+        font-size: 90%;
+        color: black;
+        background-color: #f8f8f8;
+    }
+
+    table {
+        border-spacing: 0px
+    }
+
+    th, td {
+        padding: 5px;
+        border-spacing: 15px;
+    }
+
+    td {
+        border-style: solid;
+        border-spacing: 20px;
+    }
+
+        td a {
+            border-spacing: 0px
+        }
+
+</style>

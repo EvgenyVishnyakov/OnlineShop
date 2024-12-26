@@ -1,0 +1,64 @@
+﻿@model CreateProductViewModel
+
+@{
+    ViewData["Title"] = "Панель администратора";
+}
+
+<form method="post" enctype="multipart/form-data"> 
+    <h2 class="text-center">Добавляем продукт</h2>
+    <div class="сol text-center">
+        <div>
+            <input asp-for="Category" style="width: 250px;height: 40px" class="text-center" placeholder="Категория" aria-label="Категория" aria-describedby="loginHelp" />
+            <span asp-validation-for="Category"></span>
+        </div>
+        <br />
+        <div>
+            <input asp-for="Name" style="width: 250px;height: 40px" class="text-center" placeholder="Название" aria-label="Название" aria-describedby="loginHelp" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <br />
+        <div>
+            <input asp-for="Cost" style="width: 250px;height: 40px" class="text-center" placeholder="Стоимость" aria-label="Стоимость" aria-describedby="loginHelp" />
+            <span asp-validation-for="Cost"></span>
+        </div>
+        <br />
+        <div>
+            <input asp-for="Description" style="width: 250px;height: 40px" class="text-center" placeholder="Описание" aria-label="Описание" aria-describedby="loginHelp" />
+            <span asp-validation-for="Description"></span>
+        </div>
+        <br />       
+        <div>
+            <label asp-for="UploadedFiles"><b>Загрузить изображение</b></label>
+        </div>
+        <br />
+        <div>
+            <input type="file" name="UploadedFiles" multiple accept="/images/*" class="text-center" />
+        </div>
+        <br />   
+        <button class="btn btn-primary" type="submit" 
+        asp-area="Admin" 
+        asp-controller="ProductManagment" 
+        asp-action="addProduct">Добавить продукт</button>
+    </div>
+</form>
+
+
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.validator.setDefaults({
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                onkeyup: false,
+                onclick: false
+            });
+            $("form").validate({
+                ignore: []
+            });
+        });
+    </script>
+}

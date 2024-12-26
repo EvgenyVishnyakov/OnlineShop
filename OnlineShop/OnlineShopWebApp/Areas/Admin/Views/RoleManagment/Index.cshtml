@@ -1,0 +1,54 @@
+﻿@model List<RoleVM>
+
+<div class="сol text-center">
+    <h2>Список ролей</h2>
+</div>
+
+@{
+    ViewData["Title"] = "Форма администратора";
+}
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="my-4" style="margin-right: 100px;">
+            @await Html.PartialAsync("AdminLeftMenu")
+        </div>
+    </div>
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="сol">
+            <div><h1>Активных ролей пока нет!</h1></div>
+        </div>
+    }
+    else
+    {
+        <div class="col-7">            
+                <div class="table">
+                    <table class="text-center">
+                        <tr class="head">
+                            <th scope="col"><p style="align-content: center; width: 80px"><b>№</b></p></th>
+                            <th scope="col"><p style="align-content: center; width: 250px"><b>Название</b></p></th>
+                            <th></th>
+                        </tr>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr class="product">
+                                <td scope="row" style="height:10px; width: 30px">@(i + 1)</td>
+                                <td scope="row" style="height:10px; width: 30px">@Model[i].Name</td>                                                                 
+                                <td><a type="button" class="btn btn-outline-danger" style="color: black" 
+                                    asp-area="Admin" 
+                                    asp-controller="RoleManagment" 
+                                    asp-action="Remove" 
+                                    asp-route-roleName="@Model[i].Name">Удалить</a></td>                                
+                            </tr>
+                        }                        
+                    </table>                    
+                </div>                
+        </div>
+    }
+    <div class ="col align-content-end">        
+        <a class="btn btn-primary" role="button" 
+        asp-area="Admin" 
+        asp-controller="RoleManagment" 
+        asp-action="Add">Добавить новую роль</a></div>
+</div>

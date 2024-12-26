@@ -1,0 +1,63 @@
+﻿@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Форма заказа";
+}
+
+<form method="post"> 
+
+    <input type="hidden" asp-for="@Model.OrderId" />    
+    <input type="hidden" asp-for="@Model.CreatedDateTime" />
+    <input type="hidden" asp-for="@Model.Status" />
+    <input type="hidden" asp-for="@Model.TotalCost" />
+    <input type="hidden" asp-for="@Model.Items" />
+    <input type="hidden" asp-for="@Model.Email" />
+    <input type="hidden" asp-for="@Model.OrderNumber" />
+
+    <h2>Введите Ваши данные для оформления заказа</h2>
+
+    <div class="mb-1">
+        <label asp-for="Name" class="form-label" >Ваше имя</label>
+        <input asp-for="Name" class="form-control" id="exampleInputName" value="@Model.Name" aria-describedby="nameHelp">
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="mb-2">
+        <label asp-for="Address" class="form-label" >Адрес доставки</label>
+        <input asp-for="Address" class="form-control" value="@Model.Address" id="exampleInputText" aria-describedby="adress">
+        <span asp-validation-for="Address"></span>
+    </div>
+    <div class="mb-2">
+        <label asp-for="Phone" class="form-label" >Номер телефона для связи</label>
+        <input asp-for="Phone" class="form-control" placeholder="Телефон" value="@Model.Phone" aria-label="Телефон" pattern="^\d{12}$"
+               aria-describedby="phoneHelp"/>
+        <span asp-validation-for="Phone"></span>        
+    </div>    
+    <div class="mb-2">
+        <label class="form-label">Комментарий к заказу</label>
+        <input asp-for="Comment" class="form-control" id="exampleInputComment" aria-describedby="commentlHelp" value="комментарии">        
+    </div>
+    <button class="btn btn-primary" type="submit"
+    asp-area=""
+    asp-controller="Order"
+    asp-action="Buy"
+    asp-route-userLogin="@User.Identity.Name">Оформить заказ</button>  
+    
+</form>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.validator.setDefaults({
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                onkeyup: false,
+                onclick: false
+            });
+            $("form").validate({
+                ignore: []
+            });
+        });
+    </script>
+}

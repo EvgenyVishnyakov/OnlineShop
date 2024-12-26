@@ -1,0 +1,65 @@
+﻿@model LoginModel
+@{
+    ViewData["Title"] = "Форма подтверждения";
+}
+<div class="сol text-center">
+    <div class="text-danger font-weight-bold" asp-validation-summary="ModelOnly"></div>
+</div>
+
+<form method="post">
+    <h2 class="text-center">Вход</h2>
+    <div class="сol text-center">
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <div>
+            <input asp-for="Login" style="width: 250px;height: 40px" class="text-center" placeholder="Ваш Email" aria-label="Ваш Email"
+                   aria-describedby="loginHelp" />
+            <span asp-validation-for="Login"></span>
+        </div>
+        <br />
+        <div>
+            <input asp-for="Password" style="width: 250px;height: 40px" class="text-center" placeholder="Пароль" aria-label="Пароль"
+                   aria-describedby="passwordHelp" type="password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <br />
+        <div class="form-check form-check-inline text-center">
+            <label>Запомнить меня?</label>
+            <input class="form-control-plaintext" type="checkbox" name="RememberMe" id="inlineRadio1" value="true">            
+        </div>
+    </div>
+    <br />
+    <div class="col text-center">
+        <button class="btn btn-primary text-center" style="width: 150px" type="submit"
+                asp-area=""
+                asp-controller="Authorization"
+                asp-action="Login">
+                Войти
+        </button>
+    </div>
+    <br />
+    <div class="col text-center">
+        <a class="btn btn-outline-success" role="button" style="height: 45px; width: 300px"
+           asp-area=""
+           asp-controller="Authorization"
+           asp-action="Registration" asp-route-returnUrl="@Model.ReturnUrl"><b>Регистрация нового пользователя</b></a>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.validator.setDefaults({
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                onkeyup: false,
+                onclick: false
+            });
+            $("form").validate({
+                ignore: []
+            });
+        });
+    </script>
+}

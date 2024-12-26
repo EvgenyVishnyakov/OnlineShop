@@ -1,0 +1,82 @@
+﻿@model UserRegisterViewModel
+
+@{
+    ViewData["Title"] = "Форма регистрации";
+}
+<div class="сol text-center">
+    <div class="text-danger font-weight-bold" asp-validation-summary="ModelOnly"></div>
+</div>
+<form method="post">
+    <h2 class="text-center">Регистрация</h2>
+    <div class="сol text-center">
+        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+        <div>
+            <input asp-for="Login" style="width: 250px;height: 40px" class="text-center" placeholder="Ваш Email" aria-label="Ваш Email"
+                   aria-describedby="loginHelp" />
+            <span asp-validation-for="Login"></span>
+        </div>
+        <br />
+        <div>
+            <input asp-for="PhoneNumber" style="width: 250px;height: 40px" class="text-center" aria-label="Телефон" placeholder="Телефон"
+                   aria-describedby="phoneHelp" pattern="^\d{12}$" />
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+        <br />       
+        <div>
+            <input asp-for="Password" style="width: 250px;height: 40px" class="text-center" placeholder="Пароль" aria-label="Пароль"
+                   aria-describedby="passwordHelp" type="password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <br />
+        <div>
+            <input asp-for="PasswordConfirm" style="width: 250px;height: 40px" class="text-center" placeholder="Подтвердите пароль" aria-label="Подтвердите пароль" aria-describedby="passwordHelp" type="password" />
+            <span asp-validation-for="PasswordConfirm"></span>
+        </div>
+        <br />
+    </div>
+    <br />
+    <div class="col text-center">
+        <button type="button" class="btn btn-success" style="width: 200px" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Зарегистрироваться
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="exampleModalLabel">
+                            Поздравляем с регистрацией!</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    После закрытия данного окна авторизуйтесь пожалуйста! Спасибо!
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal"
+                            asp-area=""
+                            asp-action="Registration"
+                            asp-controller="Authorization">Закрыть</button>                    
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.validator.setDefaults({
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                onkeyup: false,
+                onclick: false
+            });
+            $("form").validate({
+                ignore: []
+            });
+        });
+    </script>
+}

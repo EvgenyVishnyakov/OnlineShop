@@ -1,0 +1,13 @@
+﻿<div class="PanelUser list-group list-group-flush d-block position-static mx-0 shadow-lg">
+    <a class="AdminUser list-group-item list-group-item-action"
+       asp-area=""
+       asp-controller="Account"
+       asp-action="GetOrder"
+       asp-route-userLogin="@User.Identity.Name"><b>Список заказов</b></a>
+    <a class="AdminLeft list-group-item list-group-item-action"
+       asp-area=""
+       asp-controller="Account"
+       asp-action="Index"
+       asp-route-userLogin="@User.Identity.Name">Личные данные</a>
+</div>
+

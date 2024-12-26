@@ -1,0 +1,33 @@
+﻿@model EditProfileViewModel
+
+<form method="post" enctype="multipart/form-data">
+    <div class="col-3 text-center">
+        <input type="hidden" name="Login" value="@Model.Login" />
+        <label><b style="color: goldenrod">Текущая аватарка</b></label>
+        <div class="row">
+            <img class="card-img-top" src=@Model.ImageProfile width="150" height="250" alt="Аватарка" />
+        </div>
+        <br />
+        <div class="text-center">
+            <label><b>Загрузить новую аватарку</b></label>
+        </div>
+        <br />
+        <div class="text-center">
+            <input type="file" name="UploadedFile" accept="/images/*" class="text-center" />
+        </div>
+        <br />
+        <br />
+        <button class="btn btn-primary" type="submit"
+                asp-area=""
+                asp-controller="Account"
+                asp-action="EditProfile">
+            Внести изменения
+        </button>
+        <button class="btn btn-danger" type="submit"
+                asp-area=""
+                asp-controller="Account"
+                asp-action="Delete">
+            Удалить аватарку
+        </button>
+    </div>
+</form>

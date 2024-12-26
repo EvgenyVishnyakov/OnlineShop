@@ -1,0 +1,78 @@
+﻿@using OnlineShopWebApp.ViewModels
+@model UserVM
+
+<form method="post">
+    <div class="text-danger font-weight-bold" asp-validation-summary="ModelOnly"></div>
+    <div class="row">
+        <div class="сol text-center">
+            <div>
+                <h3>Добавление пользователя</h3>
+            </div>
+                 
+            <br />            
+            <div>
+                <input asp-for="Login" style="width: 250px;height: 40px" class="text-center" placeholder="Почта" aria-label="Почта"
+                       aria-describedby="emailHelp" />
+                <span asp-validation-for="Login"></span>
+            </div>
+            <br />
+            <div>
+                <input asp-for="PhoneNumber" style="width: 250px;height: 40px" class="text-center" placeholder="Телефон" aria-label="Телефон"
+                       aria-describedby="phoneHelp" />
+                <span asp-validation-for="PhoneNumber"></span>
+            </div>
+            <br />
+            <br />
+            <div>
+                <input asp-for="Password" style="width: 250px;height: 40px" class="text-center" placeholder="Пароль" aria-label="Пароль"
+                       aria-describedby="passwordHelp" type="password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <br />           
+            <br />
+            <button class="btn btn-outline-primary" type="submit"
+                    asp-area="Admin"
+                    asp-controller="UserManagment"
+                    asp-action="Add"
+                    asp-route-data="@Model">
+                Добавить
+            </button>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+<!-- service_style -->
+<style>
+    body {
+        font-family: Cambria,Verdana,sans-serif;
+        font-size: 90%;
+        color: #666;
+        background-color: #f8f8f8;
+    }
+
+    table {
+        border-spacing: 0px
+    }
+
+    th, td {
+        border-width: 3px;
+        border-style: solid;
+        padding: 5px;
+        border-spacing: 15px;
+    }
+
+    td {
+        border-width: 2px;
+        border-style: solid;
+        border-spacing: 20px;
+    }
+
+        td a {
+            border-spacing: 0px
+        }
+
+</style>

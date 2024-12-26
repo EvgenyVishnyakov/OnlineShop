@@ -1,0 +1,9 @@
+﻿@using OnlineShopWebApp.ViewModels
+@model RoleViewModel
+
+<div asp-for="Name">
+    @foreach (var role in Model.UserRoles)
+    {
+        <h6>@role.Name</h6>
+    }
+</div>

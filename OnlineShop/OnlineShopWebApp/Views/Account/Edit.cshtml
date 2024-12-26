@@ -1,0 +1,59 @@
+﻿@model UserWithOutPasswordVM
+
+<form method="post">
+    <div class="text-danger font-weight-bold" asp-validation-summary="All"></div>    
+    
+    <input type="hidden" asp-for="@Model.UserId" />
+    <div class="сol text-center">
+        <div>
+            <h3>Редактирование пользователя</h3>
+        </div>          
+        <div row="Email">
+            <label for="exampleEmail" class="form-label"><b style="color: goldenrod">Текущий Email</b></label>
+        </div>
+        <div>
+            <input asp-for="Login" style="width: 250px;height: 40px" class="text-center" placeholder="Почта" aria-label="Почта"
+                   value="@Model.Login" aria-describedby="emailHelp" />
+            <span asp-validation-for="Login"></span>
+        </div>
+        <br />
+        <div row="Phone">
+            <label for="examplePhone" class="form-label"><b style="color: goldenrod">Текущий номер телефона</b></label>
+        </div>
+        <div>
+            <input asp-for="PhoneNumber" style="width: 250px;height: 40px" class="text-center" placeholder="Телефон" aria-label="Телефон"
+                   value="@Model.PhoneNumber" aria-describedby="phoneHelp" />
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+        <br />         
+        <br />
+        <button class="btn btn-outline-primary" type="submit"
+                asp-area=""
+                asp-controller="Account"
+                asp-action="Edit"
+                asp-route-data="@Model">
+            Изменить
+        </button>
+    </div>
+</form>
+
+
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {           
+            $.validator.setDefaults({
+                onfocusout: function (element) {
+                    $(element).valid(); 
+                },
+                onkeyup: false, 
+                onclick: false 
+            });           
+            $("form").validate({
+                ignore: [] 
+            });
+        });
+    </script>
+}

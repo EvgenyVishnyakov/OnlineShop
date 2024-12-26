@@ -1,0 +1,90 @@
+﻿@model FavouriteViewModel
+
+@{
+    ViewData["Title"] = "Сравнение";
+}
+@if (Model == null || Model.FavouriteProducts.Count == 0)
+{
+    <div><h1>Список пока пуст!</h1></div>
+}
+@if (Model != null && Model.FavouriteProducts.Count > 0)
+{
+    <body>
+        <table>
+            <tr class="head">
+                <th scope="col"><p style="align-content: center"><b>Категория</b></p></th>
+                <th scope="col"><p style="align-content: center"><b>Наименование</b></th>
+                <th scope="col"><p style="align-content: center"><b>Описание</b></th>
+                <th scope="col"><p style="align-content: center"><b>Стоимость</b></th>
+                <th scope="col"><p style="align-content: center"><b>Удалить из сравнения</b></th>
+            </tr>
+            @foreach (var product in Model.FavouriteProducts)
+            {
+                <tr class="product">
+                    <td>@product.Category</td>
+                    <td>
+                        <a style=color: black"
+                           asp-area=""
+                           asp-controller="Product"
+                           asp-action="Index"
+                           asp-route-productId="@product.Id">
+                            @product.Name
+                        </a>
+                    </td>
+                    <td>@product.Description</td>
+                    <td>@product.Cost</td>
+                    <td>
+                        <a class="btn btn-outline-secondary" style="height: 45px; width: 100px" type="submit"
+                           asp-area=""
+                           asp-controller="Favourite"
+                           asp-action="RemoveProduct"
+                           asp-route-productId="@product.Id"
+                           asp-route-userLogin="@User.Identity.Name">-</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </body>
+}
+<a class="btn btn-primary" role="button" style="height: 45px; width: 200px"
+   asp-area=""
+   asp-controller="Home"
+   asp-action="Index"><b>Вернуться в магазин</b></a>
+<a class="btn btn-secondary" role="button" style="height: 45px; width: 200px"
+   asp-area=""
+   asp-controller="Favourite"
+   asp-action="Remove"
+   asp-route-userLogin="@User.Identity.Name">Очистить</a>
+
+
+<!-- service_style -->
+<style>
+    body {
+        font-family: Cambria,Verdana,sans-serif;
+        font-size: 90%;
+        color: #666;
+        background-color: #f8f8f8;
+    }
+
+    table {
+        border-spacing: 0px
+    }
+
+    th, td {
+        border-width: 3px;
+        border-style: solid;
+        padding: 5px;
+        border-spacing: 15px;
+    }
+
+    td {
+        border-width: 2px;
+        border-style: solid;
+        border-spacing: 20px;
+    }
+
+        td a {
+            border-spacing: 0px
+        }
+
+</style>

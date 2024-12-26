@@ -1,0 +1,87 @@
+﻿@model AccountViewModel
+
+<form method="post">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="my-4" style="margin-right: 100px;">
+                @await Html.PartialAsync("UserLeftMenu")
+            </div>
+        </div>
+        <input type="hidden" name="userId" value="@Model.UserId" />
+        <div class="col - 6">
+            <img class="card-img-top" src=@Model.ProfileImage  alt="Аватарка" />
+        </div>
+        <div class="col-6">
+            <div><b>Email логин:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.Login</b></h6>
+            <div><b>Телефон:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.PhoneNumber</b></h6>
+                 <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Действие
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="EditPassword"
+                               asp-route-userId="@Model.UserId">Смена пароля</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Edit"
+                               asp-route-userId="@Model.UserId">Редактирование данных</a>
+                        </li>
+                    <li>
+                        <a class="dropdown-item"
+                           asp-area=""
+                           asp-controller="Account"
+                           asp-action="EditProfile"
+                           asp-route-userId="@Model.UserId">Изменить аватарку</a>
+                    </li>
+                </ul>             
+                </div>
+            </div>
+        </div>
+   
+</form>
+
+
+<!-- service_style -->
+<style>
+    body {
+        font-family: Cambria,Verdana,sans-serif;
+        font-size: 90%;
+        color: #666;
+        background-color: #f8f8f8;
+    }
+
+    table {
+        border-spacing: 0px
+    }
+
+    th, td {
+        border-width: 3px;
+        border-style: solid;
+        padding: 5px;
+        border-spacing: 15px;
+    }
+
+    td {
+        border-width: 2px;
+        border-style: solid;
+        border-spacing: 20px;
+    }
+
+        td a {
+            border-spacing: 0px
+        }
+
+    .content {
+        position: center;
+        margin: 1px 1px 1px 12px;
+    }
+</style>  

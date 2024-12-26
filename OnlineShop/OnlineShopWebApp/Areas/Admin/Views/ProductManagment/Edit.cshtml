@@ -1,0 +1,89 @@
+﻿@model EditProductViewModel
+@{
+    ViewData["Title"] = "Панель администратора";
+}
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="@Model.Id" />
+    <h2 class="text-center">Внесите изменения</h2>
+    <div class="сol text-center">
+        <div row="category">
+            <label for="exampleInputCategory" class="form-label"><b style="color: goldenrod">Текущее название категории</b></label>
+        </div>
+        <div>
+            <input asp-for="Category" style="width: 250px;height: 40px" class="text-center" placeholder="Новая категория" 
+            value="@Model.Category" aria-describedby="loginHelp" />
+            <span asp-validation-for="Category"></span>
+        </div>        
+        <div row="name">
+            <label for="exampleInputName" class="form-label"><b style="color: goldenrod">Текущее название товара</b></label>
+        </div>
+        <div>
+            <input asp-for="Name" style="width: 250px;height: 40px" class="text-center" placeholder="Новое название" 
+            value="@Model.Name" aria-describedby="loginHelp" />
+            <span asp-validation-for="Name"></span>
+        </div> 
+        <div row="cost">
+            <label for="exampleInputCost" class="form-label"><b style="color: goldenrod">Текущая стоимость</b></label>
+        </div>
+        <div>
+            <input asp-for="Cost" style="width: 250px;height: 40px" class="text-center" placeholder="Новая стоимость" 
+            value="@Model.Cost" aria-describedby="loginHelp" />
+            <span asp-validation-for="Cost"></span>
+        </div>
+        <div row="description">
+            <label for="exampleInputDescription" class="form-label"><b style="color: goldenrod">Текущее описание товара</b></label>
+        </div>
+        <div>
+            <input asp-for="Description" style="width: 250px;height: 40px" class="text-center" placeholder="Текущее писание" 
+            value="@Model.Description" aria-describedby="loginHelp" />
+            <span asp-validation-for="Description"></span>
+        </div>
+        <div row="imagePath">
+            <label for="exampleInputimagePath" class="form-label"><b style="color: goldenrod">Текущее изображение</b></label>
+         </div>
+        <div class="row">            
+            @foreach (var image in Model.Images)
+            {
+                <div style="padding: 5px">
+                    <img src="@image" width="150" height="150">
+                </div>
+            }
+        </div>
+        <br />
+        <div>
+            <label><b>Загрузить новые изображения</b></label>
+         </div>
+         <br />       
+        <div>
+            <input type="file" name="UploadedFiles" multiple accept="/images/*" class="text-center" />
+        </div>
+        <br />
+        <br />   
+        <button class="btn btn-primary" type="submit" 
+        asp-area="Admin" 
+        asp-controller="ProductManagment" 
+        asp-action="UpdateProduct">Внести изменения</button>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            
+            $.validator.setDefaults({
+                onfocusout: function (element) {
+                    $(element).valid(); 
+                },
+                onkeyup: false,
+                onclick: false 
+            });
+            
+            $("form").validate({
+                ignore: [] 
+            });
+        });
+    </script>
+}

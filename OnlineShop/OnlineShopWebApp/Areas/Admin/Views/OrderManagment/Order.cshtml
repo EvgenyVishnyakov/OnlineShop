@@ -1,0 +1,52 @@
+﻿@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Форма администратора";
+}
+
+<form method="post">
+    <div class="сol text-center">
+        <h2>Заказ № @Model.OrderNumber</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="my-4" style="margin-right: 100px;">
+                @await Html.PartialAsync("AdminLeftMenu")
+            </div>
+        </div>
+        <div class="col-6">
+            <div><b>Дата и время оформления:</b></div>
+            <h6 class="card-text" style="color: rebeccapurple">
+                @Model.CreatedDateTime.Day.ToString("00").@Model.CreatedDateTime.Month.ToString("00").@Model.CreatedDateTime.Year.ToString("0000") в
+                @Model.CreatedDateTime.Hour.ToString("00"):@Model.CreatedDateTime.Minute.ToString("00")
+            </h6>
+            <div><b>Адрес доставки:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.Address</b></h6>
+            <div><b>Получатель:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.Name.ToUpper()</b></h6>
+            <div><b>Телефон:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.Phone</b></h6>
+            <div><b>Email:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.Email</b></h6>
+            <div><b>Комментарий:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.Comment</b></h6>
+            <div><b>Сумма заказа:</b></div>
+            <h6 class="card-text" style="color : rebeccapurple"><b>@Model.TotalCost</b></h6>
+            <div><b>Статус:</b></div>
+            <div class="col-3">
+                <select asp-for="@Model.Status"
+                        asp-items="@Html.GetEnumSelectList<OrderStatus>()"
+                        class="form-control">
+                </select>
+            </div>
+            <br />
+            <button class="btn btn-outline-success" type="submit"
+                    asp-area="Admin"
+                    asp-controller="OrderManagment"
+                    asp-action="UpdateOrderStatus"
+                    asp-route-orderId="@Model.OrderId">
+                Обновить статус
+            </button>
+        </div>
+    </div>
+</form>
