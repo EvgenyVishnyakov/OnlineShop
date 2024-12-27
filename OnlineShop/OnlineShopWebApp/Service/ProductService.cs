@@ -131,6 +131,16 @@ public class ProductService
         }
     }
 
+    public async Task CreateProductAsync(CreateProductViewModel productVM)
+    {
+        if (productVM.UploadedFiles != null)
+        {
+            var imagesPath = await _imagesProvider.SaveFilesAsync(productVM.UploadedFiles, ImageFolder.Products);
+            var productDB = Mapping.FromCreateProductViewModel(productVM, imagesPath);
+            await AddAsync(productDB);
+        }
+    }
+
 }
 
 
