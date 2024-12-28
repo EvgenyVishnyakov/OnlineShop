@@ -14,4 +14,6 @@ public class Product
     public List<Image> Images { get; set; }
 
     public string Category { get; set; }
+
+    public List<Review> Reviews { get; set; } = new List<Review>();
 }

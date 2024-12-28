@@ -20,6 +20,7 @@ public class ProductController : Controller
 
     public async Task<IActionResult> FindNameAsync(string name)
     {
+        0
         var product = await _productService.GetAsync(name);
         if (product != null)
             return RedirectToAction("Index", new { productId = product.Id });
