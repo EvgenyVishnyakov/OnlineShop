@@ -35,6 +35,12 @@ namespace OnlineShop.Db.Models
                       .OnDelete(DeleteBehavior.Cascade)
                       .IsRequired();
 
+            entityTypeBuilder.HasMany(p => p.Reviews)
+                      .WithOne(i => i.Product)
+                      .HasForeignKey(i => i.ProductId)
+                      .OnDelete(DeleteBehavior.Cascade)
+                      .IsRequired();
+
             entityTypeBuilder.HasData(
                 new ProductBuilder()
             .WithId(kitchenId)

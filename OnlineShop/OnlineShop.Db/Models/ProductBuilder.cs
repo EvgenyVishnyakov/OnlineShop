@@ -48,6 +48,13 @@
             return this;
         }
 
+        public ProductBuilder AddReview(List<Review> reviews)
+        {
+            _product.Reviews ??= [];
+            _product.Reviews.AddRange(reviews);
+            return this;
+        }
+
         public Product Build()
         {
             return _product;

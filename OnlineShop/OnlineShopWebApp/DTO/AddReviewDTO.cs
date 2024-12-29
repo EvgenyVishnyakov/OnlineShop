@@ -1,29 +1,22 @@
-﻿namespace OnlineShopWebApp.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace OnlineShopWebApp.DTO
 {
     public class AddReviewDTO
     {
         public Guid Id { get; set; }
 
-        /// <summary>
-        /// Id пользователя, оставившего отзыв
-        /// </summary>
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
-        /// <summary>
-        /// Текст отзыва
-        /// </summary>
+        public Guid ProductId { get; set; }
+
+        [Required]
         public string? Text { get; set; }
 
-        /// <summary>
-        /// Оценка (количество звезд)
-        /// </summary>
+        [Required]
+        [Range(0, 5, ErrorMessage = "Оценка должна быть от 0 до 5")]
         public int Grade { get; set; }
 
-        /// <summary>
-        /// Дата создания
-        /// </summary>
         public DateTime CreateDate { get; set; }
-
-        public ReviewStatus Status { get; set; }
     }
 }

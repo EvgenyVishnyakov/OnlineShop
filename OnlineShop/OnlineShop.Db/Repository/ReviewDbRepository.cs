@@ -28,6 +28,7 @@ public class ReviewDbRepository : IReviewDbRepository
 
     public async Task AddAsync(Review newReview)
     {
+        newReview.Status = ReviewStatus.Actual;
         _databaseContext.Reviews.Add(newReview);
         await _databaseContext.SaveChangesAsync();
     }
@@ -38,12 +39,13 @@ public class ReviewDbRepository : IReviewDbRepository
         return review;
     }
 
-    public async Task TryToDeleteAsync(Guid id)
+    public async Task TryToDeleteAsync(Guid id, string userId)
     {
         var reviews = await GetAllAsync();
+        var reviewsByUser = reviews.Where(x => x.UserId == userId).ToList();
         var review = reviews.FirstOrDefault(x => x.Id == id);
         review.Status = ReviewStatus.Deleted;
-        UpdateAsync(review);
+        await UpdateAsync(review);
     }
 
     public async Task UpdateAsync(Review review)

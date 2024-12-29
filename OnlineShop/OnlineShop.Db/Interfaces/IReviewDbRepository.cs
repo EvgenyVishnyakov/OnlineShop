@@ -12,7 +12,7 @@ namespace OnlineShop.Db.Interfaces
 
         Task<Review?> TryGetByIdAsync(Guid reviewId);
 
-        Task TryToDeleteAsync(Guid id);
+        Task TryToDeleteAsync(Guid id, string userId);
 
         Task UpdateAsync(Review review);
     }

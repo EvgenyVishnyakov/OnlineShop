@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Db.Models;
+using OnlineShopWebApp.DTO;
 using OnlineShopWebApp.ViewModels;
 
 namespace OnlineShopWebApp.Helpers;
@@ -297,5 +298,41 @@ public static class Mapping
         }
 
         return accountOrdersViewModel;
+    }
+
+    public static Review CreateReview(AddReviewDTO addReview)
+    {
+        return new ReviewBuilder()
+            .WithProductId(addReview.ProductId)
+            .WithUserId(addReview.UserId)
+            .WithText(addReview.Text)
+            .WithGrade(addReview.Grade)
+            .WithCreateDate(addReview.CreateDate)
+            .Build();
+    }
+
+    public static ReviewViewModel ToReviewViewModel(Review review)
+    {
+        return new ReviewViewModel()
+        {
+            Id = review.Id,
+            ProductId = review.ProductId,
+            UserId = review.UserId,
+            Text = review.Text,
+            Grade = review.Grade,
+            CreateDate = review.CreateDate,
+            Status = (ReviewStatus)review.Status
+        };
+    }
+
+    public static List<ReviewViewModel> ToReviewViewModels(List<Review> reviews)
+    {
+        var listReviewViewModel = new List<ReviewViewModel>();
+        foreach (var review in reviews)
+        {
+            listReviewViewModel.Add(ToReviewViewModel(review));
+        }
+
+        return listReviewViewModel;
     }
 }

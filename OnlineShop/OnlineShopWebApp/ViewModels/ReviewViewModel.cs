@@ -1,10 +1,11 @@
-﻿using OnlineShopWebApp.Helpers;
+﻿using OnlineShop.Db.Models;
+using OnlineShopWebApp.Helpers;
 
-namespace OnlineShop.Db.Models
+namespace OnlineShopWebApp.ViewModels
 {
-    public class Review
+    public class ReviewViewModel
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
         public string UserId { get; set; }
