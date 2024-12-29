@@ -304,7 +304,7 @@ public static class Mapping
     {
         return new ReviewBuilder()
             .WithProductId(addReview.ProductId)
-            .WithUserId(addReview.UserId)
+            .WithUserId(addReview.UserLogin)
             .WithText(addReview.Text)
             .WithGrade(addReview.Grade)
             .WithCreateDate(addReview.CreateDate)
@@ -318,6 +318,7 @@ public static class Mapping
             Id = review.Id,
             ProductId = review.ProductId,
             UserId = review.UserId,
+            ProductName = review.ProductName,
             Text = review.Text,
             Grade = review.Grade,
             CreateDate = review.CreateDate,

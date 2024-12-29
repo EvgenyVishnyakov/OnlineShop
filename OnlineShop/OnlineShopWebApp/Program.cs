@@ -48,6 +48,8 @@ try
     builder.Services.AddScoped<AccountService>();
     builder.Services.AddTransient<CartItemService>();
     builder.Services.AddScoped<ICartItemsRepository, CartItemDbRepository>();
+    builder.Services.AddTransient<ReviewService>();
+    builder.Services.AddScoped<IReviewDbRepository, ReviewDbRepository>();
 
     // указываем тип пользователя и роли
     builder.Services.AddIdentity<User, IdentityRole>()

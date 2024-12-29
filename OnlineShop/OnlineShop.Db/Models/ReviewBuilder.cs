@@ -42,6 +42,12 @@ namespace OnlineShop.Db.Models
             return this;
         }
 
+        public ReviewBuilder WithProductName(string productName)
+        {
+            _review.ProductName = productName;
+            return this;
+        }
+
         public ReviewBuilder WithReviewStatus(ReviewStatus reviewStatus)
         {
             _review.Status = reviewStatus;

@@ -6,7 +6,7 @@ namespace OnlineShopWebApp.DTO
     {
         public Guid Id { get; set; }
 
-        public string UserId { get; set; }
+        public string UserLogin { get; set; }
 
         public Guid ProductId { get; set; }
 
@@ -14,9 +14,9 @@ namespace OnlineShopWebApp.DTO
         public string? Text { get; set; }
 
         [Required]
-        [Range(0, 5, ErrorMessage = "Оценка должна быть от 0 до 5")]
+        [Range(1, 5, ErrorMessage = "Оценка должна быть от 1 до 5")]
         public int Grade { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
     }
 }

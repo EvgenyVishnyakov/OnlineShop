@@ -11,11 +11,13 @@ namespace OnlineShopWebApp.Service
     {
         private readonly IReviewDbRepository _reviewDbRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ProductService _productService;
 
-        public ReviewService(IReviewDbRepository reviewDbRepository, IUserRepository userRepository)
+        public ReviewService(IReviewDbRepository reviewDbRepository, IUserRepository userRepository, ProductService productService)
         {
             _reviewDbRepository = reviewDbRepository;
             _userRepository = userRepository;
+            _productService = productService;
         }
 
         public async Task<List<Review?>> GetAllByProductIdAsync(Guid productId)
@@ -64,6 +66,8 @@ namespace OnlineShopWebApp.Service
         public async Task AddAsync(AddReviewDTO addReview)
         {
             var reviewDb = Mapping.CreateReview(addReview);
+            var product = await _productService.GetAsync(addReview.ProductId);
+            reviewDb.ProductName = product.Name;
             await _reviewDbRepository.AddAsync(reviewDb);
 
             //var reviews = await _reviewDbRepository.Reviews.Where(x => x.ProductId == addReview.ProductId).ToListAsync();

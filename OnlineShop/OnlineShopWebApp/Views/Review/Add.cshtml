@@ -1,0 +1,48 @@
+﻿@model AddReviewDTO
+
+@{
+    ViewData["Title"] = "Форма отзыва";
+}
+<div class="text-danger font-weight-bold" asp-validation-summary="All"></div>
+<form method="post">
+
+    <h2>Введите Ваши данные для оформления отзыва</h2>
+
+    <div class="mb-1">
+        <label asp-for="Text" class="form-label">Введите текст отзыва</label>
+        <input asp-for="Text" class="form-control" id="exampleInputName" value="@Model.Text" aria-describedby="nameHelp">
+        <span asp-validation-for="Text"></span>
+    </div>
+    <div class="mb-2">
+        <label asp-for="Grade" class="form-label">Оценка от 1 до 5</label>
+        <input asp-for="Grade" class="form-control" value="@Model.Grade" id="exampleInputNumber" aria-describedby="number" required>
+        <span asp-validation-for="Grade"></span>
+    </div>
+    <button class="btn btn-primary" type="submit"
+            asp-area=""
+            asp-controller="Review"
+            asp-action="AddReview"
+            asp-route-userLogin="@User.Identity.Name"
+            asp-route-productId="@Model.ProductId">
+        Оставить отзыв
+    </button>
+
+</form>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.validator.setDefaults({
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                onkeyup: false,
+                onclick: false
+            });
+            $("form").validate({
+                ignore: []
+            });
+        });
+    </script>
+}

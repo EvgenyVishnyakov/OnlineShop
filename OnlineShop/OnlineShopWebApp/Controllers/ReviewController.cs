@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.DTO;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Service;
-using OnlineShopWebApp.ViewModels;
 
 namespace OnlineShopWebApp.Controllers;
 
@@ -15,20 +15,35 @@ public class ReviewController : Controller
         _reviewService = reviewService;
     }
 
-    public async Task<ActionResult<List<ReviewViewModel>>> GetByProductIdAsync(Guid productId)
+    public async Task<ActionResult> GetByProductIdAsync(Guid productId)
     {
         var reviews = await _reviewService.GetAllByProductIdAsync(productId);
         return View(Mapping.ToReviewViewModels(reviews));
     }
 
-    [HttpPost]
-    public async Task<ActionResult> AddAsync(AddReviewDTO addReview)
+    [Authorize]
+    public ActionResult Add(string userLogin, Guid productId)
+    {
+        if (ModelState.IsValid)
+        {
+            var addReview = new AddReviewDTO();
+            addReview.UserLogin = userLogin;
+            addReview.ProductId = productId;
+            return View(addReview);
+        }
+        else
+        {
+            return Redirect("~/Home/Index");
+        }
+    }
+
+    public async Task<ActionResult> AddReviewAsync(AddReviewDTO addReview)
     {
         await _reviewService.AddAsync(addReview);
         return Redirect("~/Home/Index");
     }
 
-    [HttpPost]
+    [HttpDelete]
     public async Task<ActionResult> DeleteAsync(Guid id, string userName)
     {
         await _reviewService.TryToDeleteAsync(id, userName);

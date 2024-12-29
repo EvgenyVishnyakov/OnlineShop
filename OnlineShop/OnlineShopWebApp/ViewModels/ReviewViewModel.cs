@@ -1,5 +1,4 @@
-﻿using OnlineShop.Db.Models;
-using OnlineShopWebApp.Helpers;
+﻿using OnlineShopWebApp.Helpers;
 
 namespace OnlineShopWebApp.ViewModels
 {
@@ -7,7 +6,7 @@ namespace OnlineShopWebApp.ViewModels
     {
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
-        public Product Product { get; set; }
+        public string ProductName { get; set; }
         public string UserId { get; set; }
         public string? Text { get; set; }
         public int Grade { get; set; }
