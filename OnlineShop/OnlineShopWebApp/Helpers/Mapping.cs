@@ -336,4 +336,13 @@ public static class Mapping
 
         return listReviewViewModel;
     }
+
+    internal static ReviewTransit ToReviewTransit(Guid productId, string userId)
+    {
+        return new ReviewTransit()
+        {
+            ProductId = productId,
+            UserId = userId
+        };
+    }
 }

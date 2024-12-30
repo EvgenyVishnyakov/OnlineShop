@@ -51,7 +51,8 @@
                    asp-area=""
                    asp-controller="Review"
                    asp-action="GetByProductId"
-                   asp-route-productId="@Model.Id"><b>Отзывы</b></a>
+                   asp-route-productId="@Model.Id"
+                   asp-route-userLogin="@User.Identity.Name"><b>Отзывы</b></a>
                 <a class="btn btn-outline-dark" role="button" style="height: 45px; width: 200px; text-align:center"
                    asp-area=""
                    asp-controller="Review"

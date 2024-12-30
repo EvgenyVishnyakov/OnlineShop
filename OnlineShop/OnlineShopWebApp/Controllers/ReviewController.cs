@@ -15,10 +15,23 @@ public class ReviewController : Controller
         _reviewService = reviewService;
     }
 
-    public async Task<ActionResult> GetByProductIdAsync(Guid productId)
+    public ActionResult GetReview(Guid productId, string userLogin)
+    {
+        var reviewAdd = Mapping.ToReviewTransit(productId, userLogin);
+        return View(reviewAdd);
+    }
+
+    public async Task<ActionResult> GetByProductIdAsync(Guid productId, string userLogin)
     {
         var reviews = await _reviewService.GetAllByProductIdAsync(productId);
-        return View(Mapping.ToReviewViewModels(reviews));
+        if (reviews.Count != 0)
+        {
+            return View(Mapping.ToReviewViewModels(reviews));
+        }
+        else
+        {
+            return RedirectToAction("GetReview", new { productId, userLogin });
+        }
     }
 
     [Authorize]

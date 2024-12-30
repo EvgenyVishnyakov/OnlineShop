@@ -17,6 +17,6 @@ namespace OnlineShopWebApp.DTO
         [Range(1, 5, ErrorMessage = "Оценка должна быть от 1 до 5")]
         public int Grade { get; set; }
 
-        public DateTime CreateDate { get; set; } = DateTime.UtcNow;
+        public DateTime CreateDate { get; set; } = DateTime.Now;
     }
 }

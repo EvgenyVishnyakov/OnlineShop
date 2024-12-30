@@ -1,0 +1,21 @@
+﻿@model ReviewTransit
+
+<div>
+    <h1>Отзывов пока нет. Будьте первым!</h1>
+    <form method="post">
+        <input type="hidden" asp-for="@User.Identity.Name" />
+        <input type="hidden" asp-for="@Model.ProductId" />
+
+        <div class="col-2">
+            <div class="сol text-center">
+                <a class="btn btn-outline-secondary" role="button" style="color:brown;margin-bottom:5px;"
+                   asp-area=""
+                   asp-controller="Review"
+                   asp-action="Add"
+                   asp-route-productId="@Model.ProductId" *@
+                   asp-route-userLogin="@User.Identity.Name"><h6>Добавить новый отзыв</h6></a>
+            </div>
+        </div>
+    </form>
+</div>
+
