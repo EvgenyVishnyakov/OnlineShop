@@ -139,6 +139,21 @@
                            asp-route-productId="@product.Id"
                            asp-route-userLogin="@User.Identity.Name"><i class="bi bi-heart"></i>В корзину</a>
                     </div>
+
+                    <div class="card-body d-flex align-items-center justify-content-around" style="text-align:center">
+                        <a class="btn btn-outline-info" style="height:40px;width:120px" title="Отзывы"
+                           asp-area=""
+                           asp-controller="Review"
+                           asp-action="GetByProductId"
+                           asp-route-productId="@product.Id"
+                           asp-route-userLogin="@User.Identity.Name"><b>Отзывы</b></a>
+                        <a class="btn btn-outline-success" style="height:40px;width:120px; font-size: 12px" title="Оставить отзыв"
+                           asp-area=""
+                           asp-controller="Review"
+                           asp-action="Add"
+                           asp-route-productId="@product.Id"
+                           asp-route-userLogin="@User.Identity.Name"><b>Оставить отзыв</b></a>
+                    </div>
                 </div>
             </div>
         }

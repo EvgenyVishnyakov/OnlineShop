@@ -47,13 +47,13 @@
                    asp-route-productId="@Model.Id"><b>Добавить в корзину</b></a>
             </div>
             <div class="card-body d-flex align-items-center justify-content-around">
-                <a class="btn btn-outline-warning" role="button" style="height: 45px; width: 200px; title="Отзывы"
+                <a class="btn btn-outline-info" role="button" style="height: 45px; width: 200px; title="Отзывы"
                    asp-area=""
                    asp-controller="Review"
                    asp-action="GetByProductId"
                    asp-route-productId="@Model.Id"
                    asp-route-userLogin="@User.Identity.Name"><b>Отзывы</b></a>
-                <a class="btn btn-outline-dark" role="button" style="height: 45px; width: 200px; text-align:center"
+                <a class="btn btn-outline-secondary" role="button" style="height: 45px; width: 200px; text-align:center"
                    asp-area=""
                    asp-controller="Review"
                    asp-action="Add"
