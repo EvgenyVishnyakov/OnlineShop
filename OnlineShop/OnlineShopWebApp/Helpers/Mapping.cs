@@ -25,7 +25,8 @@ public static class Mapping
             Cost = product.Cost,
             Description = product.Description,
             Images = product.Images,
-            Category = product.Category
+            Category = product.Category,
+            Grade = product.Grade
         };
     }
 
@@ -38,7 +39,8 @@ public static class Mapping
             Cost = product.Cost,
             Description = product.Description,
             Images = ToPaths(product.Images),
-            Category = product.Category
+            Category = product.Category,
+            Grade = product.Grade
         };
     }
 
@@ -56,6 +58,7 @@ public static class Mapping
             .WithDescription(productVM.Description)
             .WithCategory(productVM.Category)
             .AddImages(ToImage(productVM.Images))
+            .WithGrade(productVM.Grade)
             .Build();
     }
 
@@ -113,6 +116,7 @@ public static class Mapping
         .WithCategory(product.Category)
         .WithName(product.Name)
         .WithCost(product.Cost)
+        .WithGrade(product.Grade)
         .Build();
 
         return productDb;

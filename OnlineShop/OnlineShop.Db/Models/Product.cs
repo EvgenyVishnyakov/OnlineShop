@@ -15,5 +15,9 @@ public class Product
 
     public string Category { get; set; }
 
+    public double Grade { get; set; }
+
+    public Rating Rating { get; set; }
+
     public List<Review> Reviews { get; set; } = new List<Review>();
 }

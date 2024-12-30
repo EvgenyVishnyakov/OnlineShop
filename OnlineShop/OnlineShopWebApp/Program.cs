@@ -50,6 +50,7 @@ try
     builder.Services.AddScoped<ICartItemsRepository, CartItemDbRepository>();
     builder.Services.AddTransient<ReviewService>();
     builder.Services.AddScoped<IReviewDbRepository, ReviewDbRepository>();
+    builder.Services.AddScoped<IRatingDbRepository, RatingDbRepository>();
 
     // указываем тип пользователя и роли
     builder.Services.AddIdentity<User, IdentityRole>()

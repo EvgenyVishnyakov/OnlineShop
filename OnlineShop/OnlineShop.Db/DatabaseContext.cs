@@ -14,7 +14,7 @@ public class DatabaseContext : IdentityDbContext<User>
     public DbSet<Order> Orders { get; set; }
     public DbSet<Image> Images { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
-    //public DbSet<Rating> Ratings { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
     public DbSet<Review> Reviews { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)

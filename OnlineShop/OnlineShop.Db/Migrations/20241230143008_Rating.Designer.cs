@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Db;
 
@@ -11,9 +12,11 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20241230143008_Rating")]
+    partial class Rating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,73 +258,73 @@ namespace OnlineShop.Db.Migrations
                     b.HasData(
                         new
                         {
-                            ImageId = new Guid("493ad949-8e2c-4a9f-8398-d6b17346e4a5"),
+                            ImageId = new Guid("da9e8e21-b6d4-444e-863c-765e0f90f435"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("1fa293c1-a67a-43c2-8946-b0e9a38ee272"),
+                            ImageId = new Guid("9f7ec90b-02a4-4db8-ba83-41cd24d99514"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("3576197d-c1a6-47eb-9282-58c3181a701c"),
+                            ImageId = new Guid("cfbe4e6d-6b9a-4bc6-ac7b-7263af23e21f"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("029b75c7-013a-49b1-8d01-b0ef63786d03"),
+                            ImageId = new Guid("d3b78180-ae38-44fe-be31-c4b806e4444f"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("d1ac6f4b-9f7b-4319-9890-7080cd244301"),
+                            ImageId = new Guid("2a0d7b50-c918-4baf-bf66-7cd9a1ad5ba4"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("3c07db9e-723a-42c2-9787-bc15a4dc47ee"),
+                            ImageId = new Guid("ba76f7c3-b3d8-4678-9334-4e829913dc8e"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("715f2c61-dc85-4588-a3ed-0f3b780a4ecd"),
+                            ImageId = new Guid("6d8881af-c214-4689-8d7c-d7369c21fe18"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("336477eb-47f6-4051-b89d-98ce67a395d1"),
+                            ImageId = new Guid("00208dbd-16c6-4b5b-ab79-2b4b905a59f8"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("b06c753e-85bb-44de-81a0-9f9337dba470"),
+                            ImageId = new Guid("4d5e4b3d-6ada-4efd-92ee-5f7380b3f13f"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("95c15a46-7562-49f7-9040-960c5870b104"),
+                            ImageId = new Guid("b48ef960-eddd-46e9-a840-9b35b6a6b73b"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         },
                         new
                         {
-                            ImageId = new Guid("9e3e53a5-b9d0-4a10-9dd6-c33bb7ef7673"),
+                            ImageId = new Guid("46663bed-543b-421a-b8d0-f2299e3b35fa"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         },
                         new
                         {
-                            ImageId = new Guid("26232171-0b7b-4976-8167-ed2d078f3cb6"),
+                            ImageId = new Guid("65ee6d9d-a6a9-433e-b468-dc649282f94b"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         });
@@ -396,10 +399,6 @@ namespace OnlineShop.Db.Migrations
                     b.Property<Guid?>("FavouriteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Grade")
-                        .HasPrecision(3, 2)
-                        .HasColumnType("float(3)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -420,7 +419,6 @@ namespace OnlineShop.Db.Migrations
                             Category = "Кухни",
                             Cost = 127900,
                             Description = "Авторское удобство для каждодневного использования",
-                            Grade = 0.0,
                             Name = "Мария"
                         },
                         new
@@ -429,7 +427,6 @@ namespace OnlineShop.Db.Migrations
                             Category = "Шкафы",
                             Cost = 49900,
                             Description = "Уникальное удобство хранения Ваших вещей",
-                            Grade = 0.0,
                             Name = "Венге"
                         },
                         new
@@ -438,7 +435,6 @@ namespace OnlineShop.Db.Migrations
                             Category = "Детская мебель",
                             Cost = 179900,
                             Description = "Уютная обстановка для детей",
-                            Grade = 0.0,
                             Name = "Счастье"
                         },
                         new
@@ -447,7 +443,6 @@ namespace OnlineShop.Db.Migrations
                             Category = "Спальни",
                             Cost = 99900,
                             Description = "Комфорт Вашего отдыха",
-                            Grade = 0.0,
                             Name = "Пушка"
                         });
                 });
@@ -467,8 +462,7 @@ namespace OnlineShop.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Ratings");
                 });
@@ -673,8 +667,8 @@ namespace OnlineShop.Db.Migrations
             modelBuilder.Entity("OnlineShop.Db.Models.Rating", b =>
                 {
                     b.HasOne("OnlineShop.Db.Models.Product", "Product")
-                        .WithOne("Rating")
-                        .HasForeignKey("OnlineShop.Db.Models.Rating", "ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -715,9 +709,6 @@ namespace OnlineShop.Db.Migrations
             modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
                 {
                     b.Navigation("Images");
-
-                    b.Navigation("Rating")
-                        .IsRequired();
 
                     b.Navigation("Reviews");
                 });

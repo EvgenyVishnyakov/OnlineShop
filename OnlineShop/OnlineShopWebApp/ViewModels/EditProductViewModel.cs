@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace OnlineShopWebApp.ViewModels
 {
@@ -29,5 +29,7 @@ namespace OnlineShopWebApp.ViewModels
         [Required(ErrorMessage = "Не указана категория")]
         [StringLength(20, MinimumLength = 5, ErrorMessage = "Обязательно укажите категорию. Минимум 5 символов, максимум 20")]
         public string Category { get; set; }
+
+        public double Grade { get; set; }
     }
 }

@@ -55,6 +55,12 @@
             return this;
         }
 
+        public ProductBuilder WithGrade(double grade)
+        {
+            _product.Grade = grade;
+            return this;
+        }
+
         public Product Build()
         {
             return _product;

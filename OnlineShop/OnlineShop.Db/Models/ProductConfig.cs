@@ -29,6 +29,10 @@ namespace OnlineShop.Db.Models
                 .HasMaxLength(130)
                 .IsRequired();
 
+            entityTypeBuilder.Property(e => e.Grade)
+                .HasPrecision(3, 2)
+                    .IsRequired();
+
             entityTypeBuilder.HasMany(p => p.Images)
                       .WithOne(i => i.Product)
                       .HasForeignKey(i => i.ProductId)
