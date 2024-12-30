@@ -22,7 +22,7 @@ public class ReviewDbRepository : IReviewDbRepository
 
     public async Task<List<Review?>> GetAllByProductIdAsync(Guid productId)
     {
-        var reviews = await _databaseContext.Reviews.Where(x => x.ProductId == productId).ToListAsync();
+        var reviews = await _databaseContext.Reviews.Where(x => x.ProductId == productId && x.Status != ReviewStatus.Deleted).ToListAsync();
         return reviews;
     }
 

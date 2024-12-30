@@ -35,6 +35,33 @@
                             <th scope="row" style="text-align:center; margin-right:50px">@User.Identity.Name</th>
                             <th scope="row" style="text-align:center;  margin-right:50px">@review.CreateDate</th>                            
                             <th scope="row" style="text-align:center;  margin-right:50px">@review.Text</th>
+                            <td>
+                                <button type="button" class="btn-outline-danger" data-bs-toggle="modal" data-bs-target="#Returned_@review.Id">Удалить отзыв</button>
+                                <div class="modal fade" id="Returned_@review.Id" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalLongTitle" style="color: red">Внимание! Отзыв может быть удален только тем, кто его создал!</h5>
+                                                <button type="button" data-id="?=$contact['Id']?>" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">                                          
+                                                Вы уверены, что хотите удалить отзыв?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                                                <a class="btn btn-primary" type="submit"
+                                                   asp-area="n"
+                                                   asp-controller="Review"
+                                                   asp-action="Delete"
+                                                   asp-route-id="@review.Id"
+                                                   asp-route-userLogin="@User.Identity.Name">Удалить</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                         index++;
                     }

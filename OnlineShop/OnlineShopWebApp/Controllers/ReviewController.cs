@@ -56,10 +56,17 @@ public class ReviewController : Controller
         return Redirect("~/Home/Index");
     }
 
-    [HttpDelete]
-    public async Task<ActionResult> DeleteAsync(Guid id, string userName)
+    [Authorize]
+    public async Task<ActionResult> DeleteAsync(Guid id, string userLogin)
     {
-        await _reviewService.TryToDeleteAsync(id, userName);
-        return Redirect("~/Home/Index");
+        if (ModelState.IsValid)
+        {
+            await _reviewService.TryToDeleteAsync(id, userLogin);
+            return Redirect("~/Home/Index");
+        }
+        else
+        {
+            return Redirect("~/Home/Index");
+        }
     }
 }
