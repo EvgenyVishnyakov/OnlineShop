@@ -30,8 +30,7 @@ namespace OnlineShop.Db.Models
                 .IsRequired();
 
             entityTypeBuilder.Property(e => e.Grade)
-                .HasPrecision(3, 2)
-                    .IsRequired();
+                .IsRequired();
 
             entityTypeBuilder.HasMany(p => p.Images)
                       .WithOne(i => i.Product)

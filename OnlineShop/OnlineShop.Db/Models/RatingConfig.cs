@@ -13,7 +13,6 @@ public class RatingConfig : IEntityTypeConfiguration<Rating>
             .IsRequired();
 
         entityTypeBuilder.Property(e => e.Grade)
-            .HasPrecision(3, 2)
-                    .IsRequired();
+             .IsRequired();
     }
 }
