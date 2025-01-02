@@ -27,7 +27,7 @@ public class ProductController : Controller
             return Ok($"Продукта {productId} не существует");
     }
 
-    [HttpGet("GatProductByName")]
+    [HttpGet("GetProductByName")]
     public async Task<IActionResult> FindNameAsync(string name)
     {
         var product = await _productService.GetAsync(name);

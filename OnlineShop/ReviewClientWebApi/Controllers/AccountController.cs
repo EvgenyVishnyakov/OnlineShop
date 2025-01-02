@@ -4,11 +4,11 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using OnlineShopWebApi.Service;
-using Authorization = OnlineShopWebApi.Models.Authorization;
-using Registration = OnlineShopWebApi.Models.Registration;
+using ReviewClientWebApi.Interfaces;
+using Authorization = ReviewClientWebApi.Models.Authorization;
+using Registration = ReviewClientWebApi.Models.Registration;
 
-namespace OnlineShopWebApi.Controllers;
+namespace ReviewClientWebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -55,7 +55,7 @@ public class AccountController : ControllerBase
         return BadRequest($"{user.Email} уже существует. Введите другой email");
     }
 
-    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("getResult")]
     public IActionResult GetResult()
     {
