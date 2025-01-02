@@ -1,8 +1,8 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 using OnlineShopWebApp.Service;
-using System.Diagnostics;
 
 namespace OnlineShopWebApp.Controllers;
 
