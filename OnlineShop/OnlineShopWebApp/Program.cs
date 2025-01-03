@@ -28,7 +28,7 @@ try
         .Enrich.WithProperty("ApplicationName", "Online Shop");
     });
     builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connection));
-    //builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(connection));
+
     // Add services to the container.
     builder.Services.AddControllersWithViews();
 

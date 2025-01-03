@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using OnlineShop.Db.Models;
-using OnlineShopWebApp.Models;
+using OnlineShopWebApp.DTO;
 using OnlineShopWebApp.ViewModels;
 using Serilog;
 
@@ -23,7 +23,7 @@ public class AuthorizationService
         return await _userManager.FindByNameAsync(newUser.Login);
     }
 
-    public async Task<User?> GetUserByLoginAsync(LoginModel login)
+    public async Task<User?> GetUserByLoginAsync(LoginModelDTO login)
     {
         return await _userManager.FindByNameAsync(login.Login);
     }
