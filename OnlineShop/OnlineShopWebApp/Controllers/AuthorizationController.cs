@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Models;
-using OnlineShopWebApp.Models;
+using OnlineShopWebApp.DTO;
 using OnlineShopWebApp.Service;
 using OnlineShopWebApp.ViewModels;
 
@@ -20,7 +20,7 @@ public class AuthorizationController : Controller
 
     public IActionResult Login(string returnUrl)
     {
-        return View(new LoginModel() { ReturnUrl = returnUrl });
+        return View(new LoginModelDTO() { ReturnUrl = returnUrl });
     }
 
     public IActionResult Registration(string returnUrl)
@@ -48,7 +48,7 @@ public class AuthorizationController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> LoginAsync(LoginModel loginModel)
+    public async Task<IActionResult> LoginAsync(LoginModelDTO loginModel)
     {
 
         var existingUser = await _authorizationService.GetUserByLoginAsync(loginModel);
