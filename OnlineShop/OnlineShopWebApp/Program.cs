@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db;
@@ -73,6 +75,18 @@ try
             IsEssential = true
         };
     });
+    builder.Services.AddDistributedMemoryCache();// добавляем IDistributedMemoryCache
+
+    builder.Services.AddSession(options =>
+    {
+        options.Cookie.Name = ".MyApp.Session";
+        options.IdleTimeout = TimeSpan.FromSeconds(3600);
+        options.Cookie.IsEssential = true;
+    });
+
+    builder.Services.AddAuthentication("Cookies");
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options => options.LoginPath = "/login");
     var app = builder.Build();
 
 
@@ -87,8 +101,15 @@ try
     app.UseHttpsRedirection();
     app.UseStaticFiles();
 
-    app.UseRouting();
+    app.UseSession();
 
+
+    app.UseRouting();
+    app.MapGet("/Logout", async (HttpContext context) =>
+    {
+        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Results.Redirect("/login");
+    });
     app.UseAuthentication();
     app.UseAuthorization();
 
