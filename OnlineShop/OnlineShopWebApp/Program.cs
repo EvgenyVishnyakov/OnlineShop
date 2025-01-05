@@ -75,14 +75,13 @@ try
             IsEssential = true
         };
     });
-    builder.Services.AddDistributedMemoryCache();// добавляем IDistributedMemoryCache
+    builder.Services.AddDistributedMemoryCache();
 
     builder.Services.AddSession(options =>
     {
-        options.Cookie.Name = ".MyApp.Session";
-        options.IdleTimeout = TimeSpan.FromSeconds(3600);
-        options.Cookie.IsEssential = true;
+        options.IdleTimeout = TimeSpan.FromSeconds(1200);
     });
+    builder.Services.AddMvc();
 
     builder.Services.AddAuthentication("Cookies");
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
