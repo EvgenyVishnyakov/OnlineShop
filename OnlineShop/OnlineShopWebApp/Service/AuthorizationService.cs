@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.DTO;
 using OnlineShopWebApp.ViewModels;
@@ -10,12 +11,15 @@ public class AuthorizationService
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly IUserRepository _userRepository;
     private readonly string imagePath = "/Images/Пустая_аватарка.png";
 
-    public AuthorizationService(UserManager<User> userManager, SignInManager<User> signInManager)
+
+    public AuthorizationService(UserManager<User> userManager, SignInManager<User> signInManager, IUserRepository userRepository)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _userRepository = userRepository;
     }
 
     public async Task<User?> GetUserAsync(UserRegisterViewModel newUser)
@@ -59,5 +63,10 @@ public class AuthorizationService
         {
             Log.Error(ex, "Ошибка добавления роли");
         }
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        await _userRepository.UpdateAsync(user);
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OnlineShop.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialization : Migration
+    public partial class Inicialization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,7 @@ namespace OnlineShop.Db.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TempUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -225,6 +226,7 @@ namespace OnlineShop.Db.Migrations
                     Cost = table.Column<int>(type: "int", precision: 9, scale: 2, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(130)", maxLength: 130, nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Grade = table.Column<double>(type: "float", nullable: false),
                     ComparisonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FavouriteId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -293,15 +295,58 @@ namespace OnlineShop.Db.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Grade = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ratings_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Grade = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "Category", "ComparisonId", "Cost", "Description", "FavouriteId", "Name" },
+                columns: new[] { "Id", "Category", "ComparisonId", "Cost", "Description", "FavouriteId", "Grade", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15"), "Шкафы", null, 49900, "Уникальное удобство хранения Ваших вещей", null, "Венге" },
-                    { new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2"), "Кухни", null, 127900, "Авторское удобство для каждодневного использования", null, "Мария" },
-                    { new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c"), "Детская мебель", null, 179900, "Уютная обстановка для детей", null, "Счастье" },
-                    { new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0"), "Спальни", null, 99900, "Комфорт Вашего отдыха", null, "Пушка" }
+                    { new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15"), "Шкафы", null, 49900, "Уникальное удобство хранения Ваших вещей", null, 0.0, "Венге" },
+                    { new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2"), "Кухни", null, 127900, "Авторское удобство для каждодневного использования", null, 0.0, "Мария" },
+                    { new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c"), "Детская мебель", null, 179900, "Уютная обстановка для детей", null, 0.0, "Счастье" },
+                    { new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0"), "Спальни", null, 99900, "Комфорт Вашего отдыха", null, 0.0, "Пушка" }
                 });
 
             migrationBuilder.InsertData(
@@ -309,18 +354,18 @@ namespace OnlineShop.Db.Migrations
                 columns: new[] { "ImageId", "ImagesPath", "ProductId" },
                 values: new object[,]
                 {
-                    { new Guid("001b0d0f-b295-4ee8-af05-5ce0c953c0d6"), "/Images/спальни.jpg", new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0") },
-                    { new Guid("019a9fc6-ca64-4f28-acd0-c8dcec14ed8e"), "/Images/Кухня_Сормово.png", new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2") },
-                    { new Guid("1237bfaf-54ff-4aaf-b2b2-52ea83569c40"), "/Images/Кухня_Сормово.png", new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15") },
-                    { new Guid("5ea25402-dbc5-414c-85f2-9f82c7ede4d4"), "/Images/Шкаф.jpg", new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c") },
-                    { new Guid("a1dbb27f-45b4-4445-9207-e537f6ad80b9"), "/Images/спальни.jpg", new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2") },
-                    { new Guid("a54ddcb2-14f6-4d0f-a724-98212baa3b9c"), "/Images/Кухня_Сормово.png", new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c") },
-                    { new Guid("b46374f9-39cd-4202-865c-85e6cde6b806"), "/Images/Шкаф.jpg", new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15") },
-                    { new Guid("bc9fc5cd-8f9f-48ca-bbab-8cc8b34c00ee"), "/Images/спальни.jpg", new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15") },
-                    { new Guid("ddb8b8eb-2d93-44df-a8e2-448db4cbb23a"), "/Images/спальни.jpg", new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c") },
-                    { new Guid("e54c3837-c8d5-4f7f-b080-64d4dc3b3a77"), "/Images/Шкаф.jpg", new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0") },
-                    { new Guid("e94822ad-edeb-43fa-93ca-42b30b630fcf"), "/Images/Шкаф.jpg", new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2") },
-                    { new Guid("f72e3bca-476e-4bee-8f5d-57eee5785eec"), "/Images/Кухня_Сормово.png", new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0") }
+                    { new Guid("0412d403-fd9b-41cf-b53f-667067c0b64e"), "/Images/Шкаф.jpg", new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15") },
+                    { new Guid("1e8d7fa2-7c32-4867-bf3b-6cd96c300c18"), "/Images/спальни.jpg", new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0") },
+                    { new Guid("2f225b37-544a-41ec-bca1-50205bab4a96"), "/Images/Шкаф.jpg", new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c") },
+                    { new Guid("30bfcbc9-146c-4fd7-9c16-a8327ba81ee9"), "/Images/спальни.jpg", new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c") },
+                    { new Guid("317dfe8e-675f-4117-aaf5-6dae6065cc58"), "/Images/Шкаф.jpg", new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2") },
+                    { new Guid("388050c3-2aff-4bb9-a26f-78224f56a61e"), "/Images/Кухня_Сормово.png", new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0") },
+                    { new Guid("519485c3-a683-4fad-b4f5-69aba1a7d1ce"), "/Images/Кухня_Сормово.png", new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c") },
+                    { new Guid("5feaea1c-54df-443c-a5c5-f65e961d5bcb"), "/Images/Кухня_Сормово.png", new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2") },
+                    { new Guid("c647a6ed-ba9c-402a-94e5-041a1f765639"), "/Images/спальни.jpg", new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2") },
+                    { new Guid("d5d47357-857a-4a89-8013-1ee97b49f5d4"), "/Images/Кухня_Сормово.png", new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15") },
+                    { new Guid("d9fe3ccc-bbc8-4950-9d8e-4a7cf8e2eb67"), "/Images/спальни.jpg", new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15") },
+                    { new Guid("e502a520-faa7-4d8a-accc-f2b3ea82e326"), "/Images/Шкаф.jpg", new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -391,6 +436,17 @@ namespace OnlineShop.Db.Migrations
                 name: "IX_Products_FavouriteId",
                 table: "Products",
                 column: "FavouriteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_ProductId",
+                table: "Ratings",
+                column: "ProductId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_ProductId",
+                table: "Reviews",
+                column: "ProductId");
         }
 
         /// <inheritdoc />
@@ -416,6 +472,12 @@ namespace OnlineShop.Db.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

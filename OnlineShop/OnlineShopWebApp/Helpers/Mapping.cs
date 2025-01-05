@@ -349,4 +349,12 @@ public static class Mapping
             UserId = userId
         };
     }
+
+    //public static User FromLoginDTO(LoginModelDTO loginModelDTO)
+    //{
+    //    return new User()
+    //    {
+
+    //    };
+    //}
 }

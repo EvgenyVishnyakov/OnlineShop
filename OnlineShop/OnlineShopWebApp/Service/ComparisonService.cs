@@ -9,6 +9,7 @@ namespace OnlineShopWebApp.Service;
 
 public class ComparisonService
 {
+    const string SessionPerson = "TempPerson";
     private string _userIdTemporary = "b9f2a19a-e095-47a2-9ae1-480e8cc9cdf4";
     private readonly IComparisonRepository _comparisonRepository;
     private readonly ProductService _productService;
@@ -52,16 +53,11 @@ public class ComparisonService
 
     public async Task<string> GetUserIdAsync(string userLogin)
     {
-        if (!string.IsNullOrEmpty(userLogin))
-        {
-            var user = await _userManager.FindByEmailAsync(userLogin);
+        var user = await _userManager.FindByEmailAsync(userLogin);
 
-            var userId = await _userManager.GetUserIdAsync(user);
+        var userId = await _userManager.GetUserIdAsync(user);
 
-            return userId;
-        }
-        else
-            return _userIdTemporary;
+        return userId;
     }
 
     public async Task<Comparison?> GetByUserAsync(string userId)
@@ -155,5 +151,70 @@ public class ComparisonService
         {
             Log.Error(ex, $"Ошибка создания объекта сравнение");
         }
+    }
+
+    public async Task AddProductHttpContextAsync(string userId, Guid productId)
+    {
+        try
+        {
+            var product = await _productService.GetAsync(productId);
+            var comparison = await GetByUserAsync(userId);
+
+            if (comparison != null)
+            {
+                if (IsProduct(product, comparison))
+                    return;
+                else
+                {
+                    await AddNewProductAsync(product, comparison);
+                }
+            }
+            else
+            {
+                await CreateAsync(userId, product);
+            }
+            Log.Information($"Добавлен новый продукт {product.Name} в сравнение");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка добавления нового продукта в сравнение");
+        }
+    }
+
+    public async Task RemoveProductHttpContextAsync(string tempUserId, Guid productId)
+    {
+        try
+        {
+            var product = await _productService.GetAsync(productId);
+            var comparison = await GetByUserAsync(tempUserId);
+
+            comparison.Decrease(product);
+
+            await _comparisonRepository.UpdateAsync(comparison);
+            Log.Information($"Товар {product.Name} удален из сравнения");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка удаления товара из сравнения");
+        }
+    }
+
+    public async Task DeleteHttpContextAsync(string tempUserId)
+    {
+        try
+        {
+            await _comparisonRepository.DeleteAsync(tempUserId);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка удаления товара из сравнения");
+        }
+    }
+
+    public async Task<ComparisonViewModel> GetComparisonVMHttpContextAsync(string tempUserId)
+    {
+        var comparison = await GetByUserAsync(tempUserId);
+        var comparisonVM = Mapping.ToComparisonViewModel(comparison);
+        return comparisonVM;
     }
 }

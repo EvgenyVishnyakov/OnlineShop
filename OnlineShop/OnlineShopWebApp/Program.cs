@@ -31,6 +31,14 @@ try
 
     // Add services to the container.
     builder.Services.AddControllersWithViews();
+    builder.Services.AddDistributedMemoryCache();
+
+    builder.Services.AddSession(options =>
+    {
+        options.IdleTimeout = TimeSpan.FromSeconds(1200);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
 
     builder.Services.AddTransient<ProductService>();
     builder.Services.AddScoped<IProductsRepository, ProductDbRepository>();
@@ -75,12 +83,7 @@ try
             IsEssential = true
         };
     });
-    builder.Services.AddDistributedMemoryCache();
 
-    builder.Services.AddSession(options =>
-    {
-        options.IdleTimeout = TimeSpan.FromSeconds(1200);
-    });
     builder.Services.AddMvc();
 
     builder.Services.AddAuthentication("Cookies");
@@ -88,7 +91,7 @@ try
     .AddCookie(options => options.LoginPath = "/login");
     var app = builder.Build();
 
-
+    app.UseSession();
     // Configure the HTTP request pipeline.
     if (!app.Environment.IsDevelopment())
     {
@@ -100,7 +103,7 @@ try
     app.UseHttpsRedirection();
     app.UseStaticFiles();
 
-    app.UseSession();
+
 
 
     app.UseRouting();

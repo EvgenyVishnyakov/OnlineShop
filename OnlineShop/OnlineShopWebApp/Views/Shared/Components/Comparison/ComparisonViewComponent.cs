@@ -3,10 +3,11 @@ using OnlineShop.Db.Interfaces;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Service;
 
-namespace OnlineShopWebApp.Views.Shared.Components.Comparison;
+namespace OnlineShopWebApp;
 
 public class ComparisonViewComponent : ViewComponent
 {
+    const string SessionPerson = "TempPerson";
     private readonly IComparisonRepository _comparisonRepository;
     private readonly ComparisonService _comparisonService;
 
@@ -18,11 +19,24 @@ public class ComparisonViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync(string userLogin)
     {
-        var userId = await _comparisonService.GetUserIdAsync(userLogin);
-        var comparison = await _comparisonRepository.GetAsync(userId);
-        var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
+        if (userLogin != null)
+        {
+            var userId = await _comparisonService.GetUserIdAsync(userLogin);
+            var comparison = await _comparisonRepository.GetAsync(userId);
+            var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
 
-        var productCounts = comparisonViewModel?.Amount;
-        return View("Comparison", productCounts);
+            var productCounts = comparisonViewModel?.Amount;
+            return View("Comparison", productCounts);
+        }
+        else
+        {
+            var value = HttpContext.Session.GetString(SessionPerson);
+            var userId = value;
+            var comparison = await _comparisonRepository.GetAsync(userId);
+            var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
+
+            var productCounts = comparisonViewModel?.Amount;
+            return View("Comparison", productCounts);
+        }
     }
 }

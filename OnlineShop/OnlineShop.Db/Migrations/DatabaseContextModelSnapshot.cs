@@ -255,73 +255,73 @@ namespace OnlineShop.Db.Migrations
                     b.HasData(
                         new
                         {
-                            ImageId = new Guid("2f78bb49-e5ab-454e-8a94-5aacb4f4fd79"),
+                            ImageId = new Guid("5feaea1c-54df-443c-a5c5-f65e961d5bcb"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("4c2480eb-4a25-4e28-9361-a5acde34d740"),
+                            ImageId = new Guid("317dfe8e-675f-4117-aaf5-6dae6065cc58"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("482680e4-4ef0-41e3-b484-786e52bc5c8e"),
+                            ImageId = new Guid("c647a6ed-ba9c-402a-94e5-041a1f765639"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("365660df-0fe4-4bd7-9ff5-d49717a06dfe"),
+                            ImageId = new Guid("388050c3-2aff-4bb9-a26f-78224f56a61e"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("121dca91-ba9a-45a3-8467-adf3fa2a2600"),
+                            ImageId = new Guid("e502a520-faa7-4d8a-accc-f2b3ea82e326"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("90f63a6c-4bb0-4ba6-9773-eae0af3c220e"),
+                            ImageId = new Guid("1e8d7fa2-7c32-4867-bf3b-6cd96c300c18"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("073e7ccc-b131-4d4d-97f5-035b0a45afe4"),
+                            ImageId = new Guid("519485c3-a683-4fad-b4f5-69aba1a7d1ce"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("f68145f0-eb59-44d9-954b-f3b67197ef97"),
+                            ImageId = new Guid("2f225b37-544a-41ec-bca1-50205bab4a96"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("50dbf412-d344-4733-9d29-b8444d51e1d9"),
+                            ImageId = new Guid("30bfcbc9-146c-4fd7-9c16-a8327ba81ee9"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("fddcec4e-5dc4-4c0c-aecd-66e70f69ef2d"),
+                            ImageId = new Guid("d5d47357-857a-4a89-8013-1ee97b49f5d4"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         },
                         new
                         {
-                            ImageId = new Guid("950b050f-3097-4c2b-aa5b-2402cee6d4ef"),
+                            ImageId = new Guid("0412d403-fd9b-41cf-b53f-667067c0b64e"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         },
                         new
                         {
-                            ImageId = new Guid("e1ba5319-d50d-4f35-b818-608018ef371a"),
+                            ImageId = new Guid("d9fe3ccc-bbc8-4950-9d8e-4a7cf8e2eb67"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         });

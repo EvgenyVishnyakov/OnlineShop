@@ -15,12 +15,7 @@ namespace OnlineShopWebApp.DTO
         public bool RememberMe { get; set; }
         public string ReturnUrl { get; set; }
         public User User { get; set; }
+        public string UserId { get; set; }
 
-        public string UserId => GetUserId(User);
-
-        private string GetUserId(User user)
-        {
-            return user.TempUserId.ToString();
-        }
     }
 }

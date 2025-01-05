@@ -4,9 +4,10 @@ using OnlineShopWebApp.Service;
 
 namespace OnlineShopWebApp.Controllers;
 
-[Authorize]
+//[Authorize]
 public class ComparisonController : Controller
 {
+    const string SessionPerson = "TempPerson";
     private readonly ComparisonService _comparisonService;
 
     public ComparisonController(ComparisonService comparisonService)
@@ -16,26 +17,62 @@ public class ComparisonController : Controller
 
     public async Task<IActionResult> IndexAsync(string userLogin)
     {
-        var comparisonVM = await _comparisonService.GetComparisonVMAsync(userLogin);
-        return View(comparisonVM);
+        if (userLogin != null)
+        {
+            var comparisonVM = await _comparisonService.GetComparisonVMAsync(userLogin);
+            return View(comparisonVM);
+        }
+        else
+        {
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var comparisonVM = await _comparisonService.GetComparisonVMHttpContextAsync(tempUserId);
+            return View(comparisonVM);
+        }
     }
 
-    [Authorize]
+    [AllowAnonymous]
     public async Task<IActionResult> AddAsync(Guid productId, string userLogin)
     {
-        await _comparisonService.AddProductAsync(userLogin, productId);
-        return RedirectToAction("Index", new { userLogin });
+        if (userLogin != null)
+        {
+            await _comparisonService.AddProductAsync(userLogin, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
+        else
+        {
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _comparisonService.AddProductHttpContextAsync(tempUserId, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
     }
 
     public async Task<IActionResult> RemoveProductAsync(Guid productId, string userLogin)
     {
-        await _comparisonService.RemoveProductAsync(userLogin, productId);
-        return RedirectToAction("Index", new { userLogin });
+        if (userLogin != null)
+        {
+            await _comparisonService.RemoveProductAsync(userLogin, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
+        else
+        {
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _comparisonService.RemoveProductHttpContextAsync(tempUserId, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
     }
 
     public async Task<IActionResult> RemoveAsync(string userLogin)
     {
-        await _comparisonService.DeleteAsync(userLogin);
-        return RedirectToAction("Index", new { userLogin });
+        if (userLogin != null)
+        {
+            await _comparisonService.DeleteAsync(userLogin);
+            return RedirectToAction("Index", new { userLogin });
+        }
+        else
+        {
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _comparisonService.DeleteHttpContextAsync(tempUserId);
+            return RedirectToAction("Index", new { userLogin });
+        }
     }
 }
