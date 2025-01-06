@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Service;
 
 namespace OnlineShopWebApp.Controllers;
 
-[Authorize]
+//[Authorize]
 public class ComparisonController : Controller
 {
     const string SessionPerson = "TempPerson";
@@ -25,6 +25,12 @@ public class ComparisonController : Controller
         else
         {
             var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            if (tempUserId == null)
+            {
+                var user = new User();
+                HttpContext.Session.SetString(SessionPerson, user.TempUserId.ToString());
+            }
+
             var comparisonVM = await _comparisonService.GetComparisonVMHttpContextAsync(tempUserId);
             return View(comparisonVM);
         }
@@ -39,9 +45,16 @@ public class ComparisonController : Controller
         }
         else
         {
-            //var tempUserId = HttpContext.Session.GetString(SessionPerson);
-            //await _comparisonService.DeleteHttpContextAsync(tempUserId);
-            return Redirect("~/Home/Index");
+            var value = HttpContext.Session.GetString(SessionPerson);
+            if (value == null)
+            {
+                var user = new User();
+                HttpContext.Session.SetString(SessionPerson, user.TempUserId.ToString());
+            }
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _comparisonService.AddProductHttpContextAsync(tempUserId, productId);
+            return RedirectToAction("Index", new { userLogin });
+            //return Redirect("~/Home/Index");
         }
     }
 
@@ -69,9 +82,9 @@ public class ComparisonController : Controller
         }
         else
         {
-            //var tempUserId = HttpContext.Session.GetString(SessionPerson);
-            //await _comparisonService.DeleteHttpContextAsync(tempUserId);
-            return Redirect("~Home/Index");
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _comparisonService.DeleteHttpContextAsync(tempUserId);
+            return RedirectToAction("Index", new { userLogin });
         }
     }
 }

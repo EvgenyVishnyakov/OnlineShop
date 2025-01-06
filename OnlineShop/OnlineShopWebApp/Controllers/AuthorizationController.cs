@@ -12,11 +12,13 @@ public class AuthorizationController : Controller
     const string SessionPerson = "TempPerson";
     private readonly AuthorizationService _authorizationService;
     private readonly SignInManager<User> _signInManager;
+    private readonly UserService _userService;
 
-    public AuthorizationController(AuthorizationService authorizationService, SignInManager<User> signInManager)
+    public AuthorizationController(AuthorizationService authorizationService, SignInManager<User> signInManager, UserService userService)
     {
         _authorizationService = authorizationService;
         _signInManager = signInManager;
+        _userService = userService;
     }
 
     public IActionResult Login(string returnUrl)
@@ -58,9 +60,10 @@ public class AuthorizationController : Controller
             ModelState.AddModelError("", "Такой логин не существует! Пройдите регистрацию");
             return View(loginModel);
         }
-        // var tempUserId = HttpContext.Session.GetString(SessionPerson);
+        var tempUserId = HttpContext.Session.GetString(SessionPerson);
         //HttpContext.Session.Remove(SessionPerson);
-
+        existingUser.TempUserId = Guid.Parse(tempUserId);
+        await _userService.UpdateAsync(existingUser);
         var singResult = await _signInManager.PasswordSignInAsync(existingUser, loginModel.Password, loginModel.RememberMe, false);
 
         //HttpContext.Session.SetString(singResult.ToString(), tempUserId);

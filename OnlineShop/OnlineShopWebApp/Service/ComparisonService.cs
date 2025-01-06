@@ -55,7 +55,7 @@ public class ComparisonService
     {
         var user = await _userManager.FindByEmailAsync(userLogin);
 
-        var userId = await _userManager.GetUserIdAsync(user);
+        var userId = user.TempUserId.ToString();
 
         return userId;
     }

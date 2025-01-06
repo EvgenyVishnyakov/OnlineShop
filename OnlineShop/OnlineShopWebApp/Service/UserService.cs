@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.ViewModels;
@@ -11,11 +12,13 @@ public class UserService
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IUserRepository _userRepository;
 
-    public UserService(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+    public UserService(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, IUserRepository userRepository)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _userRepository = userRepository;
     }
 
     public async Task<User?> GetUserAsync(UserVM newUser)
@@ -104,5 +107,10 @@ public class UserService
 
         await _userManager.RemoveFromRolesAsync(user, userRole);
         await _userManager.AddToRolesAsync(user, userCurrentRoles);
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        await _userRepository.UpdateAsync(user);
     }
 }
