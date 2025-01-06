@@ -28,7 +28,7 @@ public class ComparisonController : Controller
             if (tempUserId == null)
             {
                 var user = new User();
-                HttpContext.Session.SetString(SessionPerson, user.TempUserId.ToString());
+                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
             }
 
             var comparisonVM = await _comparisonService.GetComparisonVMHttpContextAsync(tempUserId);
@@ -49,7 +49,7 @@ public class ComparisonController : Controller
             if (value == null)
             {
                 var user = new User();
-                HttpContext.Session.SetString(SessionPerson, user.TempUserId.ToString());
+                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
             }
             var tempUserId = HttpContext.Session.GetString(SessionPerson);
             await _comparisonService.AddProductHttpContextAsync(tempUserId, productId);

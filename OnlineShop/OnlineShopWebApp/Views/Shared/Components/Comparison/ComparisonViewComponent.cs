@@ -21,7 +21,7 @@ public class ComparisonViewComponent : ViewComponent
     {
         if (userLogin != null)
         {
-            var userId = await _comparisonService.GetUserIdAsync(userLogin);
+            var userId = await _comparisonService.GetTransitionUserIdAsync(userLogin);
             var comparison = await _comparisonRepository.GetAsync(userId);
             var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
 

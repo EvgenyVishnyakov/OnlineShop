@@ -61,12 +61,12 @@ public class AuthorizationController : Controller
             return View(loginModel);
         }
         var tempUserId = HttpContext.Session.GetString(SessionPerson);
-        //HttpContext.Session.Remove(SessionPerson);
-        existingUser.TempUserId = Guid.Parse(tempUserId);
-        await _userService.UpdateAsync(existingUser);
-        var singResult = await _signInManager.PasswordSignInAsync(existingUser, loginModel.Password, loginModel.RememberMe, false);
+        if (tempUserId != null)
+            existingUser.TransitionUserId = Guid.Parse(tempUserId);
 
-        //HttpContext.Session.SetString(singResult.ToString(), tempUserId);
+        await _userService.UpdateAsync(existingUser);
+
+        var singResult = await _signInManager.PasswordSignInAsync(existingUser, loginModel.Password, loginModel.RememberMe, false);
 
         if (singResult.Succeeded)
         {
@@ -85,19 +85,7 @@ public class AuthorizationController : Controller
     public async Task<IActionResult> LogoutAsync()
     {
         await _signInManager.SignOutAsync();
+        HttpContext.Session.Remove(SessionPerson);
         return RedirectToAction("Index", "Home");
     }
 }
-//public static class SessionExtensions
-//{
-//    public static void SetObject(this ISession session, string key, object value)
-//    {
-//        session.SetString(key, JsonConvert.SerializeObject(value));
-//    }
-
-//    public static T GetObject<T>(this ISession session, string key)
-//    {
-//        var value = session.GetString(key);
-//        return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
-//    }
-//}

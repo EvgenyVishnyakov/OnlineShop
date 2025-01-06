@@ -26,9 +26,8 @@ public class ComparisonService
     {
         try
         {
-            var userId = await GetUserIdAsync(userLogin);
             var product = await _productService.GetAsync(productId);
-            var comparison = await GetByUserAsync(userId);
+            var comparison = await GetByUserLoginAsync(userLogin);
 
             if (comparison != null)
             {
@@ -41,7 +40,8 @@ public class ComparisonService
             }
             else
             {
-                await CreateAsync(userId, product);
+                var userId = await GetUserIdAsync(userLogin);
+                await CreateAsync(userId, product, userLogin);
             }
             Log.Information($"Добавлен новый продукт {product.Name} в сравнение");
         }
@@ -51,11 +51,20 @@ public class ComparisonService
         }
     }
 
+    public async Task<string> GetTransitionUserIdAsync(string userLogin)
+    {
+        var user = await _userManager.FindByEmailAsync(userLogin);
+
+        var TransitionUserId = user.TransitionUserId.ToString();
+
+        return TransitionUserId;
+    }
+
     public async Task<string> GetUserIdAsync(string userLogin)
     {
         var user = await _userManager.FindByEmailAsync(userLogin);
 
-        var userId = user.TempUserId.ToString();
+        var userId = user.Id;
 
         return userId;
     }
@@ -64,7 +73,8 @@ public class ComparisonService
     {
         try
         {
-            return await _comparisonRepository.GetAsync(userId);
+            var comparisson = await _comparisonRepository.GetAsync(userId);
+            return comparisson;
         }
         catch (Exception ex)
         {
@@ -73,11 +83,30 @@ public class ComparisonService
         }
     }
 
+    public async Task<Comparison?> GetByUserLoginAsync(string userLogin)
+    {
+        try
+        {
+            var comparisson = await _comparisonRepository.GetByLoginAsync(userLogin);
+            return comparisson;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка получения объекта сравнения по пользователю {userLogin}");
+            return null;
+        }
+    }
+
     public async Task<ComparisonViewModel> GetComparisonVMAsync(string userLogin)
     {
-        var userId = await GetUserIdAsync(userLogin);
-
-        var comparison = await GetByUserAsync(userId);
+        var userId = await GetTransitionUserIdAsync(userLogin);
+        var nextComparison = await GetByUserAsync(userId);
+        if (nextComparison != null && nextComparison.UserName == null)
+        {
+            nextComparison.UserName = userLogin;
+            await _comparisonRepository.UpdateAsync(nextComparison);
+        }
+        var comparison = await GetByUserLoginAsync(userLogin);
         var comparisonVM = Mapping.ToComparisonViewModel(comparison);
         return comparisonVM;
     }
@@ -86,9 +115,9 @@ public class ComparisonService
     {
         try
         {
-            var userId = await GetUserIdAsync(userLogin);
+            //var userId = await GetTransitionUserIdAsync(userLogin);
             var product = await _productService.GetAsync(productId);
-            var comparison = await GetByUserAsync(userId);
+            var comparison = await GetByUserLoginAsync(userLogin);
 
             comparison.Decrease(product);
 
@@ -105,8 +134,7 @@ public class ComparisonService
     {
         try
         {
-            var userId = await GetUserIdAsync(userLogin);
-            await _comparisonRepository.DeleteAsync(userId);
+            await _comparisonRepository.DeleteByLoginAsync(userLogin);
         }
         catch (Exception ex)
         {
@@ -133,14 +161,15 @@ public class ComparisonService
         return comparisonList.ComparisonProducts.Any(x => x.Id == product.Id);
     }
 
-    private async Task CreateAsync(string userId, Product product)
+    private async Task CreateAsync(string userId, Product product, string userLogin)
     {
         try
         {
 
             var newComparison = new Comparison
             {
-                UserId = userId,
+                TransitionUserId = userId,
+                UserName = userLogin,
                 ComparisonProducts = new List<Product>()
             };
             var comparison = await _comparisonRepository.AddAsync(newComparison);
@@ -171,13 +200,33 @@ public class ComparisonService
             }
             else
             {
-                await CreateAsync(userId, product);
+                await CreateHttpAsync(userId, product);
             }
             Log.Information($"Добавлен новый продукт {product.Name} в сравнение");
         }
         catch (Exception ex)
         {
             Log.Error(ex, $"Ошибка добавления нового продукта в сравнение");
+        }
+    }
+
+    private async Task CreateHttpAsync(string userId, Product product)
+    {
+        try
+        {
+
+            var newComparison = new Comparison
+            {
+                TransitionUserId = userId,
+                ComparisonProducts = new List<Product>()
+            };
+            var comparison = await _comparisonRepository.AddAsync(newComparison);
+            comparison.ComparisonProducts.Add(product);
+            await _comparisonRepository.UpdateAsync(comparison);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка создания объекта сравнение");
         }
     }
 
@@ -211,10 +260,24 @@ public class ComparisonService
         }
     }
 
-    public async Task<ComparisonViewModel> GetComparisonVMHttpContextAsync(string tempUserId)
+    public async Task<ComparisonViewModel?> GetComparisonVMHttpContextAsync(string tempUserId)
     {
         var comparison = await GetByUserAsync(tempUserId);
-        var comparisonVM = Mapping.ToComparisonViewModel(comparison);
-        return comparisonVM;
+        if (comparison != null)
+        {
+            if (comparison.UserName != null && comparison.TransitionUserId == tempUserId)
+            {
+                return null;
+            }
+            var comparisonVM = Mapping.ToComparisonViewModel(comparison);
+            return comparisonVM;
+        }
+        else
+        {
+
+
+            var comparisonVM = Mapping.ToComparisonViewModel(comparison);
+            return comparisonVM;
+        }
     }
 }

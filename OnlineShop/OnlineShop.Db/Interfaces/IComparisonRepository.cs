@@ -12,5 +12,9 @@ public interface IComparisonRepository
     Task<bool> UpdateAsync(Comparison comparison);
 
     Task<bool> DeleteAsync(string userId);
+
+    Task<Comparison?> GetByLoginAsync(string userLogin);
+
+    Task<bool> DeleteByLoginAsync(string userLogin);
 }
 

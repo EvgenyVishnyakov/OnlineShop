@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Db;
 
@@ -11,9 +12,11 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250106122852_TransionUserId")]
+    partial class TransionUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,6 +217,7 @@ namespace OnlineShop.Db.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -258,73 +262,73 @@ namespace OnlineShop.Db.Migrations
                     b.HasData(
                         new
                         {
-                            ImageId = new Guid("1caeaee5-6346-4a3d-a43e-027d96f9c02f"),
+                            ImageId = new Guid("b94c1d62-0788-4737-b92c-3036b9443927"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("cd850076-1427-4be3-a81e-cfcd723561c6"),
+                            ImageId = new Guid("7eaa74b7-721e-4dee-8782-64d20871da2e"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("1fc5bcef-3a77-46fb-ae5d-1b4480da1e80"),
+                            ImageId = new Guid("b2b03b2c-706d-41af-a9aa-9b0b9c4adfff"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("68e896f8-c272-4b92-b52d-10d83e6452a2")
                         },
                         new
                         {
-                            ImageId = new Guid("126f9d16-fb88-49b2-9cd9-9b50218c3653"),
+                            ImageId = new Guid("50424fd9-7b44-4db1-961a-c5c7b3f860ee"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("d83399a1-44e0-49b2-8f0e-01e48b659cba"),
+                            ImageId = new Guid("2b28d03d-137a-48c2-87c1-827bd6b9033c"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("96651a47-553f-4188-aa72-9b3545555dd2"),
+                            ImageId = new Guid("663b9777-9640-4eba-a7a4-99b021fe5cf3"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("86e210d8-3e55-4887-a957-55fa04bc7fc0")
                         },
                         new
                         {
-                            ImageId = new Guid("8980e49f-bb2b-48de-9944-eb22a72ed14a"),
+                            ImageId = new Guid("c7f36756-f928-4ce9-8ec6-93ebe91178c0"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("cc9f31ee-9d82-4df8-9708-e36b9d3638ac"),
+                            ImageId = new Guid("b93952b4-620a-4f22-8e94-3d4bbd039553"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("8f0faff0-c817-4043-b9fe-26c83dfd9b9a"),
+                            ImageId = new Guid("4070684b-471b-4d53-81ec-d2c3a0d0f240"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("734b060e-7385-4c35-bfad-2187c5d8fd6c")
                         },
                         new
                         {
-                            ImageId = new Guid("36c9c044-4328-4452-90f0-a3f130889917"),
+                            ImageId = new Guid("5dd51e8e-492c-47c5-b5a6-8f879b02ba1c"),
                             ImagesPath = "/Images/Кухня_Сормово.png",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         },
                         new
                         {
-                            ImageId = new Guid("dcf77c4e-d784-4c9b-b4bd-d89d90e3253d"),
+                            ImageId = new Guid("d903720a-d6bc-4f42-b427-57785e70b7bc"),
                             ImagesPath = "/Images/Шкаф.jpg",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         },
                         new
                         {
-                            ImageId = new Guid("48c10c91-d227-4d1b-a827-c24297a8610e"),
+                            ImageId = new Guid("dee44930-dce0-411b-80a7-72b550a01319"),
                             ImagesPath = "/Images/спальни.jpg",
                             ProductId = new Guid("5a6429bd-cc54-4252-a6ea-e370fcdada15")
                         });

@@ -1,10 +1,15 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
+
 namespace OnlineShop.Db.Models;
 
 public class Comparison
 {
     public Guid Id { get; set; }
-    public string UserId { get; set; }
+    public string TransitionUserId { get; set; }
+
+    [MaybeNull]
+    public string? UserName { get; set; }
     public List<Product>? ComparisonProducts { get; set; }
 
     public void Decrease(Product product)

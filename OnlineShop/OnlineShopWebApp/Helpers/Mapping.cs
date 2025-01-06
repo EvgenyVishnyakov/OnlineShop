@@ -202,7 +202,8 @@ public static class Mapping
         return new ComparisonViewModel
         {
             Id = comparison.Id,
-            UserId = comparison.UserId,
+            TransitionUserId = comparison.TransitionUserId,
+            UserName = comparison.UserName,
             ComparisonProducts = ToProductViewModels(comparison.ComparisonProducts)
         };
     }
@@ -349,12 +350,4 @@ public static class Mapping
             UserId = userId
         };
     }
-
-    //public static User FromLoginDTO(LoginModelDTO loginModelDTO)
-    //{
-    //    return new User()
-    //    {
-
-    //    };
-    //}
 }
