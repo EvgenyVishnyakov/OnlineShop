@@ -9,8 +9,8 @@ namespace OnlineShopWebApp.Service;
 
 public class ComparisonService
 {
-    const string SessionPerson = "TempPerson";
-    private string _userIdTemporary = "b9f2a19a-e095-47a2-9ae1-480e8cc9cdf4";
+    //const string SessionPerson = "TempPerson";
+    //private string _userIdTemporary = "b9f2a19a-e095-47a2-9ae1-480e8cc9cdf4";
     private readonly IComparisonRepository _comparisonRepository;
     private readonly ProductService _productService;
     private readonly UserManager<User> _userManager;

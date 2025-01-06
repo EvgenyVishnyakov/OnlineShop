@@ -4,7 +4,7 @@ using OnlineShopWebApp.Service;
 
 namespace OnlineShopWebApp.Controllers;
 
-//[Authorize]
+[Authorize]
 public class ComparisonController : Controller
 {
     const string SessionPerson = "TempPerson";
@@ -30,7 +30,6 @@ public class ComparisonController : Controller
         }
     }
 
-    [AllowAnonymous]
     public async Task<IActionResult> AddAsync(Guid productId, string userLogin)
     {
         if (userLogin != null)
@@ -40,9 +39,9 @@ public class ComparisonController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
-            await _comparisonService.AddProductHttpContextAsync(tempUserId, productId);
-            return RedirectToAction("Index", new { userLogin });
+            //var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            //await _comparisonService.DeleteHttpContextAsync(tempUserId);
+            return Redirect("~/Home/Index");
         }
     }
 
@@ -70,9 +69,9 @@ public class ComparisonController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
-            await _comparisonService.DeleteHttpContextAsync(tempUserId);
-            return RedirectToAction("Index", new { userLogin });
+            //var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            //await _comparisonService.DeleteHttpContextAsync(tempUserId);
+            return Redirect("~Home/Index");
         }
     }
 }

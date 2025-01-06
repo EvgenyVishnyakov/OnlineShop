@@ -58,14 +58,12 @@ public class AuthorizationController : Controller
             ModelState.AddModelError("", "Такой логин не существует! Пройдите регистрацию");
             return View(loginModel);
         }
-        var tempUserId = HttpContext.Session.GetString(SessionPerson);
-        //HttpContext.Session.Remove(SessionPerson);       
-
-
+        // var tempUserId = HttpContext.Session.GetString(SessionPerson);
+        //HttpContext.Session.Remove(SessionPerson);
 
         var singResult = await _signInManager.PasswordSignInAsync(existingUser, loginModel.Password, loginModel.RememberMe, false);
-        //SessionPerson = singResult.ToString();
-        HttpContext.Session.SetString(singResult.ToString(), tempUserId);
+
+        //HttpContext.Session.SetString(singResult.ToString(), tempUserId);
 
         if (singResult.Succeeded)
         {
