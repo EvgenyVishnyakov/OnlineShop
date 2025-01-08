@@ -133,7 +133,10 @@ public class ComparisonService
             foreach (var comparison in comparisons)
             {
                 comparison.Decrease(product);
-                await _comparisonRepository.UpdateAsync(comparison);
+                if (comparison.ComparisonProducts.Count == 0)
+                    await _comparisonRepository.DeleteByLoginAsync(userLogin);
+                else
+                    await _comparisonRepository.UpdateAsync(comparison);
             }
             Log.Information($"Товар {product.Name} удален из сравнения");
         }
