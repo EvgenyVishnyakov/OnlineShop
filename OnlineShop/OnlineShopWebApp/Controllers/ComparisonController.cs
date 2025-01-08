@@ -54,7 +54,6 @@ public class ComparisonController : Controller
             var tempUserId = HttpContext.Session.GetString(SessionPerson);
             await _comparisonService.AddProductHttpContextAsync(tempUserId, productId);
             return RedirectToAction("Index", new { userLogin });
-            //return Redirect("~/Home/Index");
         }
     }
 

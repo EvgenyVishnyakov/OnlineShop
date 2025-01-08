@@ -19,24 +19,42 @@ public class ComparisonViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync(string userLogin)
     {
+        int productCounts = 0;
         if (userLogin != null)
         {
             var userId = await _comparisonService.GetTransitionUserIdAsync(userLogin);
-            var comparison = await _comparisonRepository.GetAsync(userId);
-            var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
+            var comparisonsWithOutLogin = await _comparisonService.GetByUserAsync(userId);
 
-            var productCounts = comparisonViewModel?.Amount;
-            return View("Comparison", productCounts);
+            if (comparisonsWithOutLogin != null)
+            {
+                foreach (var comparisonWithOutLogin in comparisonsWithOutLogin)
+                {
+                    if (comparisonWithOutLogin.UserName == null)
+                    {
+                        comparisonWithOutLogin.UserName = userLogin;
+                        await _comparisonRepository.UpdateAsync(comparisonWithOutLogin);
+                    }
+                }
+            }
+            var comparisons = await _comparisonRepository.GetByLoginAsync(userLogin);
+            foreach (var comparison in comparisons)
+            {
+                var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
+                productCounts += comparisonViewModel.Amount;
+            }
         }
         else
         {
             var value = HttpContext.Session.GetString(SessionPerson);
             var userId = value;
-            var comparison = await _comparisonRepository.GetAsync(userId);
-            var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
-
-            var productCounts = comparisonViewModel?.Amount;
-            return View("Comparison", productCounts);
+            var comparisons = await _comparisonRepository.GetAsync(userId);
+            foreach (var comparison in comparisons)
+            {
+                var comparisonViewModel = Mapping.ToComparisonViewModel(comparison);
+                productCounts = comparisonViewModel.Amount;
+            }
         }
+
+        return View("Comparison", productCounts);
     }
 }

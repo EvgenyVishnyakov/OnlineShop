@@ -15,28 +15,21 @@ namespace OnlineShop.Db.Repository
 
         public async Task<Comparison> AddAsync(Comparison comparison)
         {
-            try
-            {
-                await _databaseContext.Comparisons.AddAsync(comparison);
-                await _databaseContext.SaveChangesAsync();
-                return comparison;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public async Task<Comparison?> GetAsync(string userId)
-        {
-            var comparison = await _databaseContext.Comparisons.Include(x => x.ComparisonProducts).FirstOrDefaultAsync(x => x.TransitionUserId == userId);
+            await _databaseContext.Comparisons.AddAsync(comparison);
+            await _databaseContext.SaveChangesAsync();
             return comparison;
         }
 
-        public async Task<Comparison?> GetByLoginAsync(string userLogin)
+        public async Task<List<Comparison>>? GetAsync(string userId)
         {
-            var comparison = await _databaseContext.Comparisons.Include(x => x.ComparisonProducts).FirstOrDefaultAsync(x => x.UserName == userLogin);
-            return comparison;
+            var comparisons = await _databaseContext.Comparisons.Include(x => x.ComparisonProducts).Where(x => x.TransitionUserId == userId).ToListAsync();
+            return comparisons;
+        }
+
+        public async Task<List<Comparison>>? GetByLoginAsync(string userLogin)
+        {
+            var comparisons = await _databaseContext.Comparisons.Include(x => x.ComparisonProducts).Where(x => x.UserName == userLogin).ToListAsync();
+            return comparisons;
         }
 
 
@@ -49,17 +42,23 @@ namespace OnlineShop.Db.Repository
 
         public async Task<bool> DeleteAsync(string userId)
         {
-            var comparison = await GetAsync(userId);
-            _databaseContext.Comparisons.Remove(comparison);
-            await _databaseContext.SaveChangesAsync();
+            var comparisons = await GetAsync(userId);
+            foreach (var comparison in comparisons)
+            {
+                _databaseContext.Comparisons.Remove(comparison);
+                await _databaseContext.SaveChangesAsync();
+            }
             return true;
         }
 
         public async Task<bool> DeleteByLoginAsync(string userLogin)
         {
-            var comparison = await GetByLoginAsync(userLogin);
-            _databaseContext.Comparisons.Remove(comparison);
-            await _databaseContext.SaveChangesAsync();
+            var comparisons = await GetByLoginAsync(userLogin);
+            foreach (var comparison in comparisons)
+            {
+                _databaseContext.Comparisons.Remove(comparison);
+                await _databaseContext.SaveChangesAsync();
+            }
             return true;
         }
     }

@@ -1,24 +1,26 @@
-﻿@model ComparisonViewModel
+﻿@model List<ComparisonViewModel>
 
 @{
     ViewData["Title"] = "Сравнение";
 }
-@if (Model == null || Model.ComparisonProducts.Count == 0)
+@if (Model == null || Model.Count == 0)
 {
     <div><h1>Список пока пуст!</h1></div>
 }
-@if (Model != null && Model.ComparisonProducts.Count > 0)
+@if (Model.Count != 0)
 {
-    <body>
-        <table>
-            <tr class="head">
-                <th scope="col"><p style="align-content: center"><b>Категория</b></p></th>
-                <th scope="col"><p style="align-content: center"><b>Наименование</b></th>
-                <th scope="col"><p style="align-content: center"><b>Описание</b></th>
-                <th scope="col"><p style="align-content: center"><b>Стоимость</b></th>
-                <th scope="col"><p style="align-content: center"><b>Удалить из сравнения</b></th>
-            </tr>
-            @foreach (var product in Model.ComparisonProducts)
+<body>
+    <table>
+        <tr class="head">
+            <th scope="col"><p style="align-content: center"><b>Категория</b></p></th>
+            <th scope="col"><p style="align-content: center"><b>Наименование</b></th>
+            <th scope="col"><p style="align-content: center"><b>Описание</b></th>
+            <th scope="col"><p style="align-content: center"><b>Стоимость</b></th>
+            <th scope="col"><p style="align-content: center"><b>Удалить из сравнения</b></th>
+        </tr>
+        @foreach (var comparison in Model)
+        {
+            @foreach (var product in comparison.ComparisonProducts)
             {
                 <tr class="product">
                     <td>@product.Category</td>
@@ -43,9 +45,11 @@
                     </td>
                 </tr>
             }
-        </table>
-    </body>
+        }
+    </table>
+</body>
 }
+
 <a class="btn btn-primary" role="button" style="height: 45px; width: 200px"
    asp-area=""
    asp-controller="Home"

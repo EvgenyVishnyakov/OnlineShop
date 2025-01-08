@@ -7,13 +7,13 @@ public interface IComparisonRepository
 {
     Task<Comparison> AddAsync(Comparison comparison);
 
-    Task<Comparison?> GetAsync(string userId);
+    Task<List<Comparison>>? GetAsync(string userId);
 
     Task<bool> UpdateAsync(Comparison comparison);
 
     Task<bool> DeleteAsync(string userId);
 
-    Task<Comparison?> GetByLoginAsync(string userLogin);
+    Task<List<Comparison?>> GetByLoginAsync(string userLogin);
 
     Task<bool> DeleteByLoginAsync(string userLogin);
 }
