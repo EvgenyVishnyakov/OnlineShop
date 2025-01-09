@@ -9,7 +9,9 @@ namespace OnlineShop.Db.Models
         {
             entityTypeBuilder.HasKey(e => e.Id);
 
-            entityTypeBuilder.Property(e => e.UserId).IsRequired();
+            entityTypeBuilder.Property(e => e.TransitionUserId).IsRequired();
+
+            entityTypeBuilder.Property(e => e.UserName);
         }
     }
 }

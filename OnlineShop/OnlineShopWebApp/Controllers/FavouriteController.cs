@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Service;
 
 namespace OnlineShopWebApp.Controllers;
 
-[Authorize]
 public class FavouriteController : Controller
 {
+    const string SessionPerson = "TempPerson";
     private readonly FavouriteService _favouritesService;
 
     public FavouriteController(FavouriteService favouritesService)
@@ -16,26 +16,73 @@ public class FavouriteController : Controller
 
     public async Task<IActionResult> IndexAsync(string userLogin)
     {
-        var favouriteVM = await _favouritesService.GetFavouriteVMAsync(userLogin);
-        return View(favouriteVM);
+        if (userLogin != null)
+        {
+            var favouriteVM = await _favouritesService.GetFavouriteVMAsync(userLogin);
+            return View(favouriteVM);
+        }
+        else
+        {
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            if (tempUserId == null)
+            {
+                var user = new User();
+                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+            }
+
+            var favouriteVM = await _favouritesService.GetFavouriteVMHttpContextAsync(tempUserId);
+            return View(favouriteVM);
+        }
     }
 
-    [Authorize]
     public async Task<IActionResult> AddAsync(Guid productId, string userLogin)
     {
-        await _favouritesService.AddProductAsync(userLogin, productId);
-        return RedirectToAction("Index", new { userLogin });
+        if (userLogin != null)
+        {
+            await _favouritesService.AddProductAsync(userLogin, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
+        else
+        {
+            var value = HttpContext.Session.GetString(SessionPerson);
+            if (value == null)
+            {
+                var user = new User();
+                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+            }
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _favouritesService.AddProductHttpContextAsync(tempUserId, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
     }
 
     public async Task<IActionResult> RemoveProductAsync(Guid productId, string userLogin)
     {
-        await _favouritesService.RemoveProductAsync(userLogin, productId);
-        return RedirectToAction("Index", new { userLogin });
+        if (userLogin != null)
+        {
+            await _favouritesService.RemoveProductAsync(userLogin, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
+        else
+        {
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _favouritesService.RemoveProductHttpContextAsync(tempUserId, productId);
+            return RedirectToAction("Index", new { userLogin });
+        }
     }
 
     public async Task<IActionResult> RemoveAsync(string userLogin)
     {
-        await _favouritesService.DeleteAsync(userLogin);
-        return RedirectToAction("Index", new { userLogin });
+        if (userLogin != null)
+        {
+            await _favouritesService.DeleteAsync(userLogin);
+            return RedirectToAction("Index", new { userLogin });
+        }
+        else
+        {
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            await _favouritesService.DeleteHttpContextAsync(tempUserId);
+            return RedirectToAction("Index", new { userLogin });
+        }
     }
 }

@@ -4,7 +4,6 @@ using OnlineShopWebApp.Service;
 
 namespace OnlineShopWebApp.Controllers;
 
-//[Authorize]
 public class ComparisonController : Controller
 {
     const string SessionPerson = "TempPerson";

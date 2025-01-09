@@ -1,14 +1,19 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
+
 namespace OnlineShop.Db.Models;
 
 
 public class Favourite
 {
     public Guid Id { get; set; }
-    public string UserId { get; set; }
+    public string TransitionUserId { get; set; }
+
+    [MaybeNull]
+    public string? UserName { get; set; }
     public List<Product> FavouriteProducts { get; set; }
 
-    public async Task DecreaseAsync(Product product)
+    public void Decrease(Product product)
     {
         if (FavouriteProducts.Exists(x => x.Id == product.Id))
         {

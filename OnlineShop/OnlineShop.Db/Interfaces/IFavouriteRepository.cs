@@ -7,10 +7,14 @@ namespace OnlineShop.Db.Interfaces
     {
         Task<Favourite> AddAsync(Favourite favourite);
 
-        Task<Favourite?> GetAsync(string userId);
+        Task<List<Favourite>>? GetAsync(string userId);
+
+        Task<List<Favourite>>? GetByLoginAsync(string userLogin);
 
         Task<bool> UpdateAsync(Favourite favourite);
 
         Task<bool> DeleteAsync(string userId);
+
+        Task<bool> DeleteByLoginAsync(string userLogin);
     }
 }

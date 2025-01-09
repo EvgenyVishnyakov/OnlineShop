@@ -1,13 +1,13 @@
-﻿@model FavouriteViewModel
+﻿@model List<FavouriteViewModel>
 
 @{
     ViewData["Title"] = "Сравнение";
 }
-@if (Model == null || Model.FavouriteProducts.Count == 0)
+@if (Model == null || Model.Count == 0)
 {
     <div><h1>Список пока пуст!</h1></div>
 }
-@if (Model != null && Model.FavouriteProducts.Count > 0)
+@if (Model.Count > 0)
 {
     <body>
         <table>
@@ -18,30 +18,33 @@
                 <th scope="col"><p style="align-content: center"><b>Стоимость</b></th>
                 <th scope="col"><p style="align-content: center"><b>Удалить из сравнения</b></th>
             </tr>
-            @foreach (var product in Model.FavouriteProducts)
+            @foreach (var favourite in Model)
             {
-                <tr class="product">
-                    <td>@product.Category</td>
-                    <td>
-                        <a style=color: black"
-                           asp-area=""
-                           asp-controller="Product"
-                           asp-action="Index"
-                           asp-route-productId="@product.Id">
-                            @product.Name
-                        </a>
-                    </td>
-                    <td>@product.Description</td>
-                    <td>@product.Cost</td>
-                    <td>
-                        <a class="btn btn-outline-secondary" style="height: 45px; width: 100px" type="submit"
-                           asp-area=""
-                           asp-controller="Favourite"
-                           asp-action="RemoveProduct"
-                           asp-route-productId="@product.Id"
-                           asp-route-userLogin="@User.Identity.Name">-</a>
-                    </td>
-                </tr>
+                @foreach (var product in favourite.FavouriteProducts)
+                {
+                    <tr class="product">
+                        <td>@product.Category</td>
+                        <td>
+                            <a style=color: black"
+                               asp-area=""
+                               asp-controller="Product"
+                               asp-action="Index"
+                               asp-route-productId="@product.Id">
+                                @product.Name
+                            </a>
+                        </td>
+                        <td>@product.Description</td>
+                        <td>@product.Cost</td>
+                        <td>
+                            <a class="btn btn-outline-secondary" style="height: 45px; width: 100px" type="submit"
+                               asp-area=""
+                               asp-controller="Favourite"
+                               asp-action="RemoveProduct"
+                               asp-route-productId="@product.Id"
+                               asp-route-userLogin="@User.Identity.Name">-</a>
+                        </td>
+                    </tr>
+                }
             }
         </table>
     </body>

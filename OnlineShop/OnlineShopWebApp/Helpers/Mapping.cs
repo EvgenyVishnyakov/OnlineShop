@@ -190,7 +190,8 @@ public static class Mapping
         return new FavouriteViewModel
         {
             Id = favourite.Id,
-            UserId = favourite.UserId,
+            TransitionUserId = favourite.TransitionUserId,
+            UserName = favourite.UserName,
             FavouriteProducts = ToProductViewModels(favourite.FavouriteProducts)
         };
     }

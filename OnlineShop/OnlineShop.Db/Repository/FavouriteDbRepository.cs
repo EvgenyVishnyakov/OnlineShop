@@ -16,23 +16,23 @@ public class FavouriteDbRepository : IFavouriteRepository
 
     public async Task<Favourite> AddAsync(Favourite favourite)
     {
-        try
-        {
-            await _databaseContext.Favourites.AddAsync(favourite);
-            await _databaseContext.SaveChangesAsync();
-            return favourite;
-        }
-        catch
-        {
-            return null;
-        }
-    }
-
-    public async Task<Favourite?> GetAsync(string userId)
-    {
-        var favourite = await _databaseContext.Favourites.Include(x => x.FavouriteProducts).FirstOrDefaultAsync(x => x.UserId == userId);
+        await _databaseContext.Favourites.AddAsync(favourite);
+        await _databaseContext.SaveChangesAsync();
         return favourite;
     }
+
+    public async Task<List<Favourite>>? GetAsync(string userId)
+    {
+        var favourites = await _databaseContext.Favourites.Include(x => x.FavouriteProducts).Where(x => x.TransitionUserId == userId).ToListAsync();
+        return favourites;
+    }
+
+    public async Task<List<Favourite>>? GetByLoginAsync(string userLogin)
+    {
+        var favourites = await _databaseContext.Favourites.Include(x => x.FavouriteProducts).Where(x => x.UserName == userLogin).ToListAsync();
+        return favourites;
+    }
+
 
     public async Task<bool> UpdateAsync(Favourite favourite)
     {
@@ -43,9 +43,23 @@ public class FavouriteDbRepository : IFavouriteRepository
 
     public async Task<bool> DeleteAsync(string userId)
     {
-        var favourite = await GetAsync(userId);
-        _databaseContext.Favourites.Remove(favourite);
-        await _databaseContext.SaveChangesAsync();
+        var favourites = await GetAsync(userId);
+        foreach (var favourite in favourites)
+        {
+            _databaseContext.Favourites.Remove(favourite);
+            await _databaseContext.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task<bool> DeleteByLoginAsync(string userLogin)
+    {
+        var favourites = await GetByLoginAsync(userLogin);
+        foreach (var favourite in favourites)
+        {
+            _databaseContext.Favourites.Remove(favourite);
+            await _databaseContext.SaveChangesAsync();
+        }
         return true;
     }
 }

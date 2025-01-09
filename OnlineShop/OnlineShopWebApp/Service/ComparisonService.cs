@@ -127,7 +127,6 @@ public class ComparisonService
     {
         try
         {
-            //var userId = await GetTransitionUserIdAsync(userLogin);
             var product = await _productService.GetAsync(productId);
             var comparisons = await GetByUserLoginAsync(userLogin);
             foreach (var comparison in comparisons)

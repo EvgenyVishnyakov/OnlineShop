@@ -9,7 +9,6 @@ namespace OnlineShopWebApp.Service;
 
 public class FavouriteService
 {
-    private string _userIdTemporary = "b9f2a19a-e095-47a2-9ae1-480e8cc9cdf4";
     private readonly IFavouriteRepository _favouriteRepository;
     private readonly ProductService _productService;
     private readonly UserManager<User> _userManager;
@@ -25,22 +24,25 @@ public class FavouriteService
     {
         try
         {
-            var userId = await GetUserIdAsync(userLogin);
             var product = await _productService.GetAsync(productId);
-            var favourite = await GetByUserAsync(userId);
+            var favourites = await GetByUserLoginAsync(userLogin);
 
-            if (favourite != null)
+            if (favourites.Count != 0)
             {
-                if (IsProduct(product, favourite))
-                    return;
-                else
+                foreach (var favourite in favourites)
                 {
-                    await AddNewProductAsync(product, favourite);
+                    if (IsProduct(product, favourite))
+                        return;
+                    else
+                    {
+                        await AddNewProductAsync(product, favourite);
+                    }
                 }
             }
             else
             {
-                await CreateAsync(userId, product);
+                var userId = await GetUserIdAsync(userLogin);
+                await CreateAsync(userId, product, userLogin);
             }
             Log.Information($"Добавлен новый продукт {product.Name} в избранном");
         }
@@ -50,25 +52,30 @@ public class FavouriteService
         }
     }
 
-    public async Task<string> GetUserIdAsync(string userLogin)
+    public async Task<string> GetTransitionUserIdAsync(string userLogin)
     {
-        if (!string.IsNullOrEmpty(userLogin))
-        {
-            var user = await _userManager.FindByEmailAsync(userLogin);
+        var user = await _userManager.FindByEmailAsync(userLogin);
 
-            var userId = await _userManager.GetUserIdAsync(user);
+        var TransitionUserId = user.TransitionUserId.ToString();
 
-            return userId;
-        }
-        else
-            return _userIdTemporary;
+        return TransitionUserId;
     }
 
-    public async Task<Favourite?> GetByUserAsync(string userId)
+    public async Task<string> GetUserIdAsync(string userLogin)
+    {
+        var user = await _userManager.FindByEmailAsync(userLogin);
+
+        var userId = user.Id;
+
+        return userId;
+    }
+
+    public async Task<List<Favourite>?> GetByUserAsync(string userId)
     {
         try
         {
-            return await _favouriteRepository.GetAsync(userId);
+            var favourites = await _favouriteRepository.GetAsync(userId);
+            return favourites;
         }
         catch (Exception ex)
         {
@@ -77,26 +84,59 @@ public class FavouriteService
         }
     }
 
-    public async Task<FavouriteViewModel> GetFavouriteVMAsync(string userLogin)
+    public async Task<List<Favourite>?> GetByUserLoginAsync(string userLogin)
     {
-        var userId = await GetUserIdAsync(userLogin);
+        try
+        {
+            var favourites = await _favouriteRepository.GetByLoginAsync(userLogin);
+            return favourites;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка получения объекта сравнения по пользователю {userLogin}");
+            return null;
+        }
+    }
 
-        var favourite = await GetByUserAsync(userId);
-        var favouriteVM = Mapping.ToFavouriteViewModel(favourite);
-        return favouriteVM;
+    public async Task<List<FavouriteViewModel>> GetFavouriteVMAsync(string userLogin)
+    {
+        var listFavouriteVM = new List<FavouriteViewModel>();
+        var userId = await GetTransitionUserIdAsync(userLogin);
+        var nextFavourites = await GetByUserAsync(userId);
+        if (nextFavourites != null)
+        {
+            foreach (var nextFavourite in nextFavourites)
+            {
+                if (nextFavourite.UserName == null)
+                {
+                    nextFavourite.UserName = userLogin;
+                    await _favouriteRepository.UpdateAsync(nextFavourite);
+                }
+            }
+        }
+        var favourites = await GetByUserLoginAsync(userLogin);
+        foreach (var favourite in favourites)
+        {
+            var favouriteVM = Mapping.ToFavouriteViewModel(favourite);
+            listFavouriteVM.Add(favouriteVM);
+        }
+        return listFavouriteVM;
     }
 
     public async Task RemoveProductAsync(string userLogin, Guid productId)
     {
         try
         {
-            var userId = await GetUserIdAsync(userLogin);
             var product = await _productService.GetAsync(productId);
-            var favourite = await GetByUserAsync(userId);
-
-            favourite.DecreaseAsync(product);
-
-            await _favouriteRepository.UpdateAsync(favourite);
+            var favourites = await GetByUserLoginAsync(userLogin);
+            foreach (var favourite in favourites)
+            {
+                favourite.Decrease(product);
+                if (favourite.FavouriteProducts.Count == 0)
+                    await _favouriteRepository.DeleteByLoginAsync(userLogin);
+                else
+                    await _favouriteRepository.UpdateAsync(favourite);
+            }
             Log.Information($"Товар {product.Name} удален из избранного");
         }
         catch (Exception ex)
@@ -109,8 +149,7 @@ public class FavouriteService
     {
         try
         {
-            var userId = await GetUserIdAsync(userLogin);
-            await _favouriteRepository.DeleteAsync(userId);
+            await _favouriteRepository.DeleteByLoginAsync(userLogin);
         }
         catch (Exception ex)
         {
@@ -137,14 +176,64 @@ public class FavouriteService
         return favouritesList.FavouriteProducts.Any(x => x.Id == product.Id);
     }
 
-    private async Task CreateAsync(string userId, Product product)
+    private async Task CreateAsync(string userId, Product product, string userLogin)
+    {
+        try
+        {
+            var newFavourite = new Favourite
+            {
+                TransitionUserId = userId,
+                UserName = userLogin,
+                FavouriteProducts = new List<Product>()
+            };
+            var favourite = await _favouriteRepository.AddAsync(newFavourite);
+            favourite.FavouriteProducts.Add(product);
+            await _favouriteRepository.UpdateAsync(newFavourite);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка создания объекта избранное");
+        }
+    }
+
+    public async Task AddProductHttpContextAsync(string userId, Guid productId)
+    {
+        try
+        {
+            var product = await _productService.GetAsync(productId);
+            var favourites = await GetByUserAsync(userId);
+            if (favourites.Count != 0)
+            {
+                foreach (var favourite in favourites)
+                {
+                    if (IsProduct(product, favourite))
+                        return;
+                    else
+                    {
+                        await AddNewProductAsync(product, favourite);
+                    }
+                }
+            }
+            else
+            {
+                await CreateHttpAsync(userId, product);
+            }
+            Log.Information($"Добавлен новый продукт {product.Name} в избранное");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка добавления нового продукта в избранное");
+        }
+    }
+
+    private async Task CreateHttpAsync(string userId, Product product)
     {
         try
         {
 
             var newFavourite = new Favourite
             {
-                UserId = userId,
+                TransitionUserId = userId,
                 FavouriteProducts = new List<Product>()
             };
             var favourite = await _favouriteRepository.AddAsync(newFavourite);
@@ -153,7 +242,62 @@ public class FavouriteService
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Ошибка создания объекта сравнение");
+            Log.Error(ex, $"Ошибка создания объекта избранное");
         }
+    }
+
+    public async Task RemoveProductHttpContextAsync(string tempUserId, Guid productId)
+    {
+        try
+        {
+            var product = await _productService.GetAsync(productId);
+            var favourites = await GetByUserAsync(tempUserId);
+            foreach (var favourite in favourites)
+            {
+                favourite.Decrease(product);
+                await _favouriteRepository.UpdateAsync(favourite);
+            }
+            Log.Information($"Товар {product.Name} удален из избранного");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка удаления товара из избранного");
+        }
+    }
+
+    public async Task DeleteHttpContextAsync(string tempUserId)
+    {
+        try
+        {
+            await _favouriteRepository.DeleteAsync(tempUserId);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка удаления товара из избранного");
+        }
+    }
+
+    public async Task<List<FavouriteViewModel>>? GetFavouriteVMHttpContextAsync(string tempUserId)
+    {
+        var favourites = await GetByUserAsync(tempUserId);
+        var favouriteVM = new List<FavouriteViewModel>();
+        if (favourites.Count != 0)
+        {
+            foreach (var favourite in favourites)
+            {
+                if (favourite.UserName != null && favourite.TransitionUserId == tempUserId)
+                {
+                    continue;
+                }
+                favouriteVM.Add(Mapping.ToFavouriteViewModel(favourite));
+            }
+        }
+        else
+        {
+            foreach (var favourite in favourites)
+                favouriteVM.Add(Mapping.ToFavouriteViewModel(favourite));
+        }
+
+        return favouriteVM;
     }
 }
