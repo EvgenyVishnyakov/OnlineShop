@@ -27,7 +27,7 @@ public class AuthorizationController : Controller
         return View(new LoginModelDTO() { ReturnUrl = returnUrl });
     }
 
-    public IActionResult Registration(string returnUrl)
+    public ActionResult Registration(string returnUrl)
     {
         return View(new UserRegisterViewModel() { ReturnUrl = returnUrl });
     }
@@ -43,8 +43,14 @@ public class AuthorizationController : Controller
         if (ModelState.IsValid)
         {
             var newUser = await _authorizationService.CreateUserAsync(userRegister);
+            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            if (tempUserId != null)
+                newUser.TransitionUserId = Guid.Parse(tempUserId);
+
+            await _userService.UpdateAsync(newUser);
+
             if (userRegister.ReturnUrl == null)
-                return Redirect("Login");
+                return Redirect("~/Home/Index");
             else
                 return Redirect(userRegister.ReturnUrl);
         }

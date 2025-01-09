@@ -5,8 +5,6 @@ namespace OnlineShopWebApp.ViewModels
 {
     public class UserRegisterViewModel
     {
-        public Guid CustomerId { get; set; } = Guid.NewGuid();
-
         [Required(ErrorMessage = "Не указан email")]
         [EmailAddress(ErrorMessage = "введите Ваш email")]
         public string Login { get; set; }
