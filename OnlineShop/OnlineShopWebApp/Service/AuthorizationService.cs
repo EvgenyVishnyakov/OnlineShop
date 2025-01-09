@@ -36,6 +36,7 @@ public class AuthorizationService
     {
         var user = new User
         {
+            //Id = newUser.CustomerId.ToString(),
             Email = newUser.Login,
             UserName = newUser.Login,
             PhoneNumber = newUser.PhoneNumber,

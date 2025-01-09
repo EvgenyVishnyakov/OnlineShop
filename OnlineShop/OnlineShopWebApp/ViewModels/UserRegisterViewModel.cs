@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace OnlineShopWebApp.ViewModels
 {
     public class UserRegisterViewModel
     {
-        public Guid CustomerId { get; set; }
+        public Guid CustomerId { get; set; } = Guid.NewGuid();
 
         [Required(ErrorMessage = "Не указан email")]
         [EmailAddress(ErrorMessage = "введите Ваш email")]
