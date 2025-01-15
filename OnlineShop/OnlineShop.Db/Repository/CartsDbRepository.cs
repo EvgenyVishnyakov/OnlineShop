@@ -63,4 +63,44 @@ public class CartsDbRepository : ICartsRepository
             await _databaseContext.SaveChangesAsync();
         }
     }
+
+    public async Task<bool> DeleteAsync(string userId)
+    {
+        var carts = await GetAsync(userId);
+        foreach (var cart in carts)
+        {
+            _databaseContext.Carts.Remove(cart);
+            await _databaseContext.SaveChangesAsync();
+        }
+        return true;
+    }
+
+    public async Task<List<Cart>>? GetAsync(string userId)
+    {
+        var carts = await _databaseContext.Carts.Include(x => x.Items).Where(x => x.TransitionUserId == userId).ToListAsync();
+        return carts;
+    }
+
+    public async Task<List<Cart>>? GetByIdAsync(string userId)
+    {
+        var carts = await _databaseContext.Carts.Include(x => x.Items).Where(x => x.UserId == userId).ToListAsync();
+        return carts;
+    }
+
+    public async Task<List<Cart>>? GetByLoginAsync(string userLogin)
+    {
+        var carts = await _databaseContext.Carts.Include(x => x.Items).Where(x => x.UserName == userLogin).ToListAsync();
+        return carts;
+    }
+
+    public async Task<bool> DeleteByLoginAsync(string userLogin)
+    {
+        var carts = await GetByLoginAsync(userLogin);
+        foreach (var cart in carts)
+        {
+            _databaseContext.Carts.Remove(cart);
+            await _databaseContext.SaveChangesAsync();
+        }
+        return true;
+    }
 }

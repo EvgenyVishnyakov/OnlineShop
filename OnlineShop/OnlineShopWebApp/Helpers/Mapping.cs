@@ -70,6 +70,7 @@ public static class Mapping
         {
             CartId = cart.CartId,
             UserId = cart.UserId,
+            UserName = cart.UserName,
             Quantity = cart.Items.Count,
             Items = ToCartItemViewModels(cart.Items)
         };

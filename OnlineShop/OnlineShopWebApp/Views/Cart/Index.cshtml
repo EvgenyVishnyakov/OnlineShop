@@ -1,10 +1,10 @@
-﻿@model CartViewModel
+﻿@model List<CartViewModel>
 
 @{
     ViewData["Title"] = "Корзина";
 }
 
-@if (Model is null || Model.Items.Count == 0)
+@if (Model is null || Model.Count == 0)
 {
     <div class="row">
         <div class="col">
@@ -18,10 +18,10 @@
        asp-controller="Home"
        asp-action="Index"><b>Продолжить покупки</b></a>    
 } 
-@if (Model != null && Model.Items.Count > 0)
+@if (Model != null && Model.Count > 0)
 {
-    <input type="hidden" asp-for="CartId" value="@Model.CartId" />
-    <input type="hidden" asp-for="@User.Identity.Name" />
+    @* @* @* <input type="hidden" asp-for="CartId" value="@Model.CartId" /> *@
+   @*  <input type="hidden" asp-for="@User.Identity.Name" /> *@
 
     <body>
         <h2>Ваша корзина</h2>
@@ -34,8 +34,10 @@
                 <th scope="col"><p style="align-content: center"><b>Прибавить,ед</b></th>
                 <th scope="col"><p style="align-content: center"><b>Убавить,ед</b></th>
             </tr>
-            @foreach (var product in Model.Items)
+            @foreach (var cart in Model)
             {
+                @foreach (var product in cart)
+                {
                 <tr class="product">
                     <td>
                         <a style=color: black"
@@ -66,14 +68,16 @@
                            asp-route-userLogin="@User.Identity.Name">-</a>
                     </td>
                 </tr>
-            }
+                }
+            
             <tr>
                 <td colspan="3"><h3 style="color:brown"><b>Итого</b></h3></td>
-                <td><a style="color:brown"><b>@Model.TotalCost</b></a></td>
+                <td><a style="color:brown"><b>@cart.TotalCost</b></a></td>
             </tr>
-        </table>
+            }
+        </table>        
     </body>
-
+    
     <a class="btn btn-success" role="button" style="height: 45px; width: 200px"
        asp-area=""
        asp-controller="Order"
