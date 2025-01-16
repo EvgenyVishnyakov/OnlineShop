@@ -61,5 +61,19 @@ namespace OnlineShop.Db.Repository
             }
             return true;
         }
+
+        public async Task<bool> DeleteByLoginAndComparisonAsync(string userLogin, Comparison comparison)
+        {
+            var comparisons = await GetByLoginAsync(userLogin);
+            foreach (var item in comparisons)
+            {
+                if (item.Id == comparison.Id)
+                {
+                    _databaseContext.Comparisons.Remove(item);
+                    await _databaseContext.SaveChangesAsync();
+                }
+            }
+            return true;
+        }
     }
 }

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Корзина";
 }
 
-@if (Model is null || Model.Count == 0)
+@if (Model.Count == 0 || Model == null)
 {
     <div class="row">
         <div class="col">
@@ -16,13 +16,10 @@
     <a class="btn btn-primary" role="button" style="height: 45px; width: 200px"
        asp-area=""
        asp-controller="Home"
-       asp-action="Index"><b>Продолжить покупки</b></a>    
-} 
-@if (Model != null && Model.Count > 0)
+       asp-action="Index"><b>Продолжить покупки</b></a>
+}
+@if (Model.Count > 0)
 {
-    @* @* @* <input type="hidden" asp-for="CartId" value="@Model.CartId" /> *@
-   @*  <input type="hidden" asp-for="@User.Identity.Name" /> *@
-
     <body>
         <h2>Ваша корзина</h2>
         <table>
@@ -36,65 +33,69 @@
             </tr>
             @foreach (var cart in Model)
             {
-                @foreach (var product in cart)
+                @foreach (var product in cart.Items)
                 {
-                <tr class="product">
-                    <td>
-                        <a style=color: black"
-                           asp-area=""
-                           asp-controller="Cart"
-                           asp-action="Index"
-                           asp-route-productId="@product.Product.Id">
-                            @product.Product.Name
-                        </a>
-                    </td>
-                    <td>@product.Quantity</td>
-                    <td>@product.Product.Cost</td>
-                    <td>@product.UnitPrice</td>
-                    <td>
-                        <a class="btn btn-outline-secondary"
-                           asp-area=""
-                           asp-controller="Cart"
-                           asp-action="Add"
-                           asp-route-productId="@product.Product.Id" 
-                           asp-route-userLogin="@User.Identity.Name"  style="height: 45px; width: 100px" type="submit">+</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-outline-secondary" style="height: 45px; width: 100px" type="submit"
-                           asp-area=""
-                           asp-controller="Cart"
-                           asp-action="Subtraction"
-                           asp-route-productId="@product.Product.Id"
-                           asp-route-userLogin="@User.Identity.Name">-</a>
-                    </td>
-                </tr>
+                    <tr class="product">
+                        <td>
+                            <a style=color: black"
+                               asp-area=""
+                               asp-controller="Cart"
+                               asp-action="Index"
+                               asp-route-productId="@product.Product.Id">
+                                @product.Product.Name
+                            </a>
+                        </td>
+                        <td>@product.Quantity</td>
+                        <td>@product.Product.Cost</td>
+                        <td>@product.UnitPrice</td>
+                        <td>
+                            <a class="btn btn-outline-secondary"
+                               asp-area=""
+                               asp-controller="Cart"
+                               asp-action="Add"
+                               asp-route-productId="@product.Product.Id"
+                               asp-route-userLogin="@User.Identity.Name" style="height: 45px; width: 100px" type="submit">+</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-secondary" style="height: 45px; width: 100px" type="submit"
+                               asp-area=""
+                               asp-controller="Cart"
+                               asp-action="Subtraction"
+                               asp-route-productId="@product.Product.Id"
+                               asp-route-userLogin="@User.Identity.Name">-</a>
+                        </td>
+                    </tr>
                 }
-            
+                      
+            }
+        </table>
+        <br />
+        @foreach (var cart in Model)
+        {
             <tr>
                 <td colspan="3"><h3 style="color:brown"><b>Итого</b></h3></td>
                 <td><a style="color:brown"><b>@cart.TotalCost</b></a></td>
             </tr>
-            }
-        </table>        
-    </body>
-    
-    <a class="btn btn-success" role="button" style="height: 45px; width: 200px"
-       asp-area=""
-       asp-controller="Order"
-       asp-action="Add"
-       asp-route-userLogin="@User.Identity.Name"
-       asp-route-cartId="@Model.CartId"><b>Оформить заказ</b></a>
+            <a class="btn btn-success" role="button" style="height: 45px; width: 200px"
+               asp-area=""
+               asp-controller="Order"
+               asp-action="Add"
+               asp-route-userLogin="@User.Identity.Name"
+               asp-route-cartId="@cart.CartId"><b>Оформить заказ</b></a>
 
-    <a class="btn btn-primary" role="button" style="height: 45px; width: 200px"
-       asp-area=""
-       asp-controller="Home"
-       asp-action="Index"><b>Продолжить покупки</b></a>
-    <a class="btn btn-secondary" role="button" style="height: 45px; width: 200px"
-       asp-area=""
-       asp-controller="Cart"
-       asp-action="Remove"
-       asp-route-cartId="@Model.CartId"
-       asp-route-userLogin="@User.Identity.Name">Очистить корзину</a>       
+            <a class="btn btn-primary" role="button" style="height: 45px; width: 200px"
+               asp-area=""
+               asp-controller="Home"
+               asp-action="Index"><b>Продолжить покупки</b></a>
+            <a class="btn btn-secondary" role="button" style="height: 45px; width: 200px"
+               asp-area=""
+               asp-controller="Cart"
+               asp-action="Remove"
+               asp-route-cartId="@cart.CartId"
+               asp-route-userLogin="@User.Identity.Name"
+               asp-route-cartId="@cart.CartId">Очистить корзину</a>
+        }
+    </body>
 }
 
 

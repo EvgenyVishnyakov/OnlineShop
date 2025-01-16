@@ -62,5 +62,19 @@ public class FavouriteDbRepository : IFavouriteRepository
         }
         return true;
     }
+
+    public async Task<bool> DeleteByLoginAndFavouriteAsync(string userLogin, Favourite favourite)
+    {
+        var favourites = await GetByLoginAsync(userLogin);
+        foreach (var item in favourites)
+        {
+            if (item.Id == favourite.Id)
+            {
+                _databaseContext.Favourites.Remove(item);
+                await _databaseContext.SaveChangesAsync();
+            }
+        }
+        return true;
+    }
 }
 

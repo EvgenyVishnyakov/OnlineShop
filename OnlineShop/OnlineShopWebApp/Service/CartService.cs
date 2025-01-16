@@ -9,7 +9,6 @@ namespace OnlineShopWebApp.Service;
 
 public class CartService
 {
-    //private readonly string temporaryLogin = "b9f2a19a-e095-47a2-9ae1-480e8cc9cdf4";
     private readonly ICartsRepository _cartsRepository;
     private readonly ProductService _productService;
     private readonly UserManager<User> _userManager;
@@ -35,11 +34,12 @@ public class CartService
             }
             else
             {
-                foreach (var cart in carts)
+                //var cart = await CreateAsync(userLogin);
+                foreach (var item in carts)
                 {
-                    if (cart.CartId == cartId)
+                    if (item.UserName == userLogin)
                     {
-                        await AddProductInOldCartAsync(product, cart);
+                        await AddProductInOldCartAsync(product, item);
                     }
                 }
                 return true;
@@ -78,31 +78,30 @@ public class CartService
         return userId;
     }
 
-    public async Task<Cart?> GetByUserAsync(string userLogin)
+    public async Task<List<Cart>> GetByUserAsync(string userLogin)
     {
         try
         {
-            var userId = await GetUserIdAsync(userLogin);
-            var cart = await _cartsRepository.GetByUserIdAsync(userId);
-            return cart;
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Ошибка получения по юзеру");
-            return null;
-        }
-    }
-
-    public async Task<List<Cart>>? GetByTransitionUserIdAsync(string userId)
-    {
-        try
-        {
-            var carts = await _cartsRepository.GetByIdAsync(userId);
+            var carts = await _cartsRepository.GetByLoginAsync(userLogin);
             return carts;
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Ошибка получения объекта сравнения по пользователю {userId}");
+            Log.Error(ex, "Ошибка получения по юзеру");
+            return [];
+        }
+    }
+
+    public async Task<List<Cart>>? GetByTransitionUserIdAsync(string transitionUserId)
+    {
+        try
+        {
+            var carts = await _cartsRepository.GetAsync(transitionUserId);
+            return carts;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, $"Ошибка получения объекта сравнения по пользователю {transitionUserId}");
             return null;
         }
     }
@@ -124,8 +123,8 @@ public class CartService
     public async Task<List<CartViewModel>> GetCartVMAsync(string userLogin)
     {
         var listCartVM = new List<CartViewModel>();
-        var userId = await GetTransitionUserIdAsync(userLogin);
-        var nextCarts = await GetByTransitionUserIdAsync(userId);
+        var transitionUserId = await GetTransitionUserIdAsync(userLogin);
+        var nextCarts = await GetByTransitionUserIdAsync(transitionUserId);
         if (nextCarts.Count != 0)
         {
             foreach (var nextCart in nextCarts)
@@ -138,6 +137,7 @@ public class CartService
             }
         }
         var carts = await GetByUserLoginAsync(userLogin);
+
         foreach (var cart in carts)
         {
             var cartVM = Mapping.ToCartViewModel(cart);
@@ -202,7 +202,9 @@ public class CartService
     {
         try
         {
+            var userId = await GetUserIdAsync(userLogin);
             var cart = GetNewCart(userLogin);
+            cart.TransitionUserId = userId; ;
             await _cartsRepository.AddAsync(cart);
             Log.Information($"Корзина пользователя ID: {userLogin} создана");
             return cart;
@@ -227,7 +229,7 @@ public class CartService
         try
         {
             await _cartsRepository.UpdateAsync(cart);
-            Log.Information($"Корзина пользователя ID: {cart.UserId} обновлена");
+            Log.Information($"Корзина пользователя ID: {cart.UserName} обновлена");
         }
         catch (Exception ex)
         {
@@ -266,7 +268,8 @@ public class CartService
         {
             var newCart = new Cart
             {
-                TransitionUserId = userId
+                TransitionUserId = userId,
+                Items = new List<CartItem>()
             };
             await _cartsRepository.AddAsync(newCart);
             await newCart.AddItemAsync(product);
@@ -287,7 +290,10 @@ public class CartService
             foreach (var cart in carts)
             {
                 cart.DecreaseCount(product);
-                await _cartsRepository.UpdateAsync(cart);
+                if (cart.Items.Count > 0)
+                    await _cartsRepository.UpdateAsync(cart);
+                else
+                    await _cartsRepository.DeleteAsync(tempUserId);
             }
             Log.Information($"Товар {product.Name} удален из избранного");
         }
@@ -333,5 +339,9 @@ public class CartService
         return cartVM;
     }
 
-
+    public async Task<List<Cart>> GetByUserIdAsync(string userId)
+    {
+        var carts = await _cartsRepository.GetAsync(userId);
+        return carts;
+    }
 }

@@ -69,7 +69,7 @@ public static class Mapping
         return new CartViewModel
         {
             CartId = cart.CartId,
-            UserId = cart.UserId,
+            TransitionUserId = cart.TransitionUserId,
             UserName = cart.UserName,
             Quantity = cart.Items.Count,
             Items = ToCartItemViewModels(cart.Items)

@@ -6,7 +6,9 @@ public interface ICartsRepository
 {
     Task AddAsync(Cart cart);
 
-    Task<Cart?> GetByUserIdAsync(string userId);
+    Task<Cart?> GetCartByLoginAsync(string userLogin);
+
+    //Task<Cart?> GetByUserIdAsync(string userId);
 
     Task<Cart?> GetCartByCartIdAsync(Guid cartId);
 
@@ -20,7 +22,7 @@ public interface ICartsRepository
 
     Task<List<Cart>>? GetByLoginAsync(string userLogin);
 
-    Task<List<Cart>>? GetByIdAsync(string userId);
+    //Task<List<Cart>>? GetByIdAsync(string userId);
 
     Task DeleteAsync(Guid cartId);
 

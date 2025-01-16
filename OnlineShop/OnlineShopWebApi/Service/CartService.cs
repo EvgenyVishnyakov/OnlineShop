@@ -51,8 +51,7 @@ namespace OnlineShopWebApi.Service
         {
             try
             {
-                var userId = await GetUserIdAsync(userLogin);
-                return await _cartsRepository.GetByUserIdAsync(userId);
+                return await _cartsRepository.GetCartByLoginAsync(userLogin);
             }
             catch (Exception ex)
             {
@@ -65,8 +64,7 @@ namespace OnlineShopWebApi.Service
         {
             try
             {
-                var userId = await GetUserIdAsync(userLogin);
-                return await _cartsRepository.GetByUserIdAsync(userId) ?? await CreateAsync(userId);
+                return await _cartsRepository.GetCartByLoginAsync(userLogin) ?? await CreateAsync(userLogin);
             }
             catch (Exception ex)
             {
@@ -109,13 +107,13 @@ namespace OnlineShopWebApi.Service
             }
         }
 
-        private async Task<Cart> CreateAsync(string userId)
+        private async Task<Cart> CreateAsync(string userLogin)
         {
             try
             {
-                var cart = await GetNewCart(userId);
+                var cart = await GetNewCart(userLogin);
                 await _cartsRepository.AddAsync(cart);
-                Log.Information($"Корзина пользователя ID: {userId} создана");
+                Log.Information($"Корзина пользователя ID: {userLogin} создана");
                 return cart;
             }
             catch (Exception ex)
@@ -125,11 +123,11 @@ namespace OnlineShopWebApi.Service
             }
         }
 
-        private async Task<Cart> GetNewCart(string userId)
+        private async Task<Cart> GetNewCart(string userLogin)
         {
             return new Cart
             {
-                UserId = userId
+                UserName = userLogin
             };
         }
 
@@ -138,7 +136,7 @@ namespace OnlineShopWebApi.Service
             try
             {
                 await _cartsRepository.UpdateAsync(cart);
-                Log.Information($"Корзина пользователя ID: {cart.UserId} обновлена");
+                Log.Information($"Корзина пользователя ID: {cart.UserName} обновлена");
             }
             catch (Exception ex)
             {

@@ -16,5 +16,7 @@ namespace OnlineShop.Db.Interfaces
         Task<bool> DeleteAsync(string userId);
 
         Task<bool> DeleteByLoginAsync(string userLogin);
+
+        Task<bool> DeleteByLoginAndFavouriteAsync(string userLogin, Favourite favourite);
     }
 }

@@ -34,13 +34,8 @@ public class CartController : Controller
             var cartVM = await _cartService.GetCartVMHttpContextAsync(tempUserId);
             return View(cartVM);
         }
-
-
-        //var cart = await _cartService.GetByUserAsync(userLogin);
-        //return View(Mapping.ToCartViewModel(cart));
     }
 
-    //[Authorize]
     public async Task<IActionResult> AddAsync(Guid productId, string userLogin, Guid cartId)
     {
         if (userLogin != null)
@@ -60,9 +55,6 @@ public class CartController : Controller
             await _cartService.AddProductHttpContextAsync(tempUserId, productId);
             return RedirectToAction("Index", new { userLogin });
         }
-
-        //await _cartService.AddProductAsync(userLogin, productId);
-        //return RedirectToAction("Index", new { userLogin });
     }
 
     public IActionResult ShowCart(string userLogin)
@@ -83,10 +75,6 @@ public class CartController : Controller
             await _cartService.RemoveProductHttpContextAsync(tempUserId, productId);
             return RedirectToAction("Index", new { userLogin });
         }
-
-
-        //await _cartService.DecreaseAmountAsync(userLogin, productId);
-        //return RedirectToAction("Index", new { userLogin });
     }
 
     public async Task<IActionResult> RemoveAsync(string userLogin, Guid cartId)
@@ -102,7 +90,6 @@ public class CartController : Controller
             await _cartService.DeleteHttpContextAsync(tempUserId);
             return RedirectToAction("Index", new { userLogin });
         }
-        //await _cartService.DeleteAsync(cartId);
-        //return RedirectToAction("Index", new { userLogin });
+
     }
 }

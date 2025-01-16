@@ -6,8 +6,10 @@ namespace OnlineShop.Db.Models;
 public class Cart
 {
     public Guid CartId { get; set; }
-    public string UserId { get; set; }
+    //public string UserId { get; set; }
+
     public string TransitionUserId { get; set; }
+
     [MaybeNull]
     public string? UserName { get; set; }
     public string IsActive { get; set; }

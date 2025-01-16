@@ -131,17 +131,21 @@ public class ComparisonService
             var comparisons = await GetByUserLoginAsync(userLogin);
             foreach (var comparison in comparisons)
             {
-                comparison.Decrease(product);
-                if (comparison.ComparisonProducts.Count == 0)
-                    await _comparisonRepository.DeleteByLoginAsync(userLogin);
-                else
-                    await _comparisonRepository.UpdateAsync(comparison);
+                if (comparison.Decrease(product))
+                {
+                    if (comparison.ComparisonProducts.Count == 0)
+                        await _comparisonRepository.DeleteByLoginAndComparisonAsync(userLogin, comparison);
+                    else
+                        await _comparisonRepository.UpdateAsync(comparison);
+
+                    break;
+                }
             }
-            Log.Information($"Товар {product.Name} удален из сравнения");
+            Log.Information($"Товар {product.Name} удален из избранного");
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Ошибка удаления товара из сравнения");
+            Log.Error(ex, $"Ошибка удаления товара из избранного");
         }
     }
 

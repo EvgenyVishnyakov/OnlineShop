@@ -131,11 +131,15 @@ public class FavouriteService
             var favourites = await GetByUserLoginAsync(userLogin);
             foreach (var favourite in favourites)
             {
-                favourite.Decrease(product);
-                if (favourite.FavouriteProducts.Count == 0)
-                    await _favouriteRepository.DeleteByLoginAsync(userLogin);
-                else
-                    await _favouriteRepository.UpdateAsync(favourite);
+                if (favourite.Decrease(product))
+                {
+                    if (favourite.FavouriteProducts.Count == 0)
+                        await _favouriteRepository.DeleteByLoginAndFavouriteAsync(userLogin, favourite);
+                    else
+                        await _favouriteRepository.UpdateAsync(favourite);
+
+                    break;
+                }
             }
             Log.Information($"Товар {product.Name} удален из избранного");
         }

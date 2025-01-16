@@ -19,12 +19,12 @@ public class CartsDbRepository : ICartsRepository
         await _databaseContext.SaveChangesAsync();
     }
 
-    public async Task<Cart?> GetByUserIdAsync(string userId)
+    public async Task<Cart?> GetCartByLoginAsync(string userLogin)
     {
         return await _databaseContext.Carts
             .Include(x => x.Items)
             .ThenInclude(x => x.Product)
-            .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == "true");
+            .FirstOrDefaultAsync(x => x.UserName == userLogin && x.IsActive == "true");
     }
 
     public async Task<Cart?> GetCartByCartIdAsync(Guid cartId)
@@ -77,19 +77,21 @@ public class CartsDbRepository : ICartsRepository
 
     public async Task<List<Cart>>? GetAsync(string userId)
     {
-        var carts = await _databaseContext.Carts.Include(x => x.Items).Where(x => x.TransitionUserId == userId).ToListAsync();
-        return carts;
-    }
-
-    public async Task<List<Cart>>? GetByIdAsync(string userId)
-    {
-        var carts = await _databaseContext.Carts.Include(x => x.Items).Where(x => x.UserId == userId).ToListAsync();
+        var carts = await _databaseContext.Carts
+            .Include(x => x.Items)
+            .ThenInclude(x => x.Product)
+            .Where(x => x.TransitionUserId == userId && x.IsActive == "true")
+            .ToListAsync();
         return carts;
     }
 
     public async Task<List<Cart>>? GetByLoginAsync(string userLogin)
     {
-        var carts = await _databaseContext.Carts.Include(x => x.Items).Where(x => x.UserName == userLogin).ToListAsync();
+        var carts = await _databaseContext.Carts
+            .Include(x => x.Items)
+            .ThenInclude(x => x.Product)
+            .Where(x => x.UserName == userLogin && x.IsActive == "true")
+            .ToListAsync();
         return carts;
     }
 

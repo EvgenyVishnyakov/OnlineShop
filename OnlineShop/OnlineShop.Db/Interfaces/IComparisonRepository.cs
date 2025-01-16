@@ -16,5 +16,7 @@ public interface IComparisonRepository
     Task<List<Comparison?>> GetByLoginAsync(string userLogin);
 
     Task<bool> DeleteByLoginAsync(string userLogin);
+
+    Task<bool> DeleteByLoginAndComparisonAsync(string userLogin, Comparison comparison);
 }
 
