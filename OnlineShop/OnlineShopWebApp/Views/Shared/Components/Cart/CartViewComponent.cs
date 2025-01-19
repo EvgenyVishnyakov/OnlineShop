@@ -22,37 +22,48 @@ public class CartViewComponent : ViewComponent
         int productCounts = 0;
         if (userLogin != null)
         {
-            var userId = await _cartService.GetTransitionUserIdAsync(userLogin);
-            var cartsWithOutLogin = await _cartService.GetByUserIdAsync(userId);
+            var transitionUserId = await _cartService.GetTransitionUserIdAsync(userLogin);
+            var cartWithOutLogin = await _cartService.GetByUserIdAsync(transitionUserId);
+            var cart = await _cartService.GetByUserAsync(userLogin);
 
-            if (cartsWithOutLogin.Count != 0)
+            if (cartWithOutLogin != null)
             {
-                foreach (var cartWithOutLogin in cartsWithOutLogin)
+                if (cart != null)
                 {
                     if (cartWithOutLogin.UserName == null)
                     {
                         cartWithOutLogin.UserName = userLogin;
-                        await _cartRepository.UpdateAsync(cartWithOutLogin);
+                        cart.Items.AddRange(cartWithOutLogin.Items);
+                        await _cartRepository.UpdateAsync(cart);
+                        await _cartRepository.DeleteCartAsync(cartWithOutLogin);
+                        var cartViewModel = Mapping.ToCartViewModel(cart);
+                        productCounts += cartViewModel != null ? cartViewModel.Amount : 0;
                     }
                 }
+                else
+                {
+                    var userId = await _cartService.GetUserIdAsync(userLogin);
+                    cartWithOutLogin.TransitionUserId = userId;
+                    cartWithOutLogin.UserName = userLogin;
+                    await _cartRepository.UpdateAsync(cartWithOutLogin);
+                    var cartViewModel = Mapping.ToCartViewModel(cartWithOutLogin);
+                    productCounts += cartViewModel != null ? cartViewModel.Amount : 0;
+                }
+
             }
-            var carts = await _cartRepository.GetByLoginAsync(userLogin);
-            foreach (var cart in carts)
+            else
             {
                 var cartViewModel = Mapping.ToCartViewModel(cart);
-                productCounts += cartViewModel.Amount;
+                productCounts += cartViewModel != null ? cartViewModel.Amount : 0;
             }
         }
         else
         {
             var value = HttpContext.Session.GetString(SessionPerson);
             var userId = value;
-            var carts = await _cartRepository.GetAsync(userId);
-            foreach (var cart in carts)
-            {
-                var cartViewModel = Mapping.ToCartViewModel(cart);
-                productCounts = cartViewModel.Amount;
-            }
+            var cart = await _cartRepository.GetAsync(userId);
+            var cartViewModel = Mapping.ToCartViewModel(cart);
+            productCounts = cartViewModel != null ? cartViewModel.Amount : 0;
         }
 
         return View("Cart", productCounts);

@@ -26,24 +26,18 @@ public class CartService
         try
         {
             var product = await _productService!.GetAsync(productId);
-            var carts = await GetByUserLoginAsync(userLogin);
-            if (carts.Count == 0)
+            var cart = await GetByUserLoginAsync(userLogin);
+            if (cart == null)
             {
-                var cart = await CreateAsync(userLogin);
+                cart = await CreateAsync(userLogin);
                 await AddProductInOldCartAsync(product, cart);
+
             }
             else
             {
-                //var cart = await CreateAsync(userLogin);
-                foreach (var item in carts)
-                {
-                    if (item.UserName == userLogin)
-                    {
-                        await AddProductInOldCartAsync(product, item);
-                    }
-                }
-                return true;
+                await AddProductInOldCartAsync(product, cart);
             }
+
             Log.Information($"Добавлен продукт в корзину пользователя с ID: {userLogin}");
             return true;
         }
@@ -78,17 +72,17 @@ public class CartService
         return userId;
     }
 
-    public async Task<List<Cart>> GetByUserAsync(string userLogin)
+    public async Task<Cart?> GetByUserAsync(string userLogin)
     {
         try
         {
-            var carts = await _cartsRepository.GetByLoginAsync(userLogin);
-            return carts;
+            var cart = await _cartsRepository.GetByLoginAsync(userLogin);
+            return cart;
         }
         catch (Exception ex)
         {
             Log.Error(ex, "Ошибка получения по юзеру");
-            return [];
+            return null;
         }
     }
 
@@ -96,7 +90,7 @@ public class CartService
     {
         try
         {
-            var carts = await _cartsRepository.GetAsync(transitionUserId);
+            var carts = await _cartsRepository.GetAllAsync(transitionUserId);
             return carts;
         }
         catch (Exception ex)
@@ -106,12 +100,12 @@ public class CartService
         }
     }
 
-    public async Task<List<Cart>?> GetByUserLoginAsync(string userLogin)
+    public async Task<Cart?> GetByUserLoginAsync(string userLogin)
     {
         try
         {
-            var carts = await _cartsRepository.GetByLoginAsync(userLogin);
-            return carts;
+            var cart = await _cartsRepository.GetByLoginAsync(userLogin);
+            return cart;
         }
         catch (Exception ex)
         {
@@ -120,30 +114,11 @@ public class CartService
         }
     }
 
-    public async Task<List<CartViewModel>> GetCartVMAsync(string userLogin)
+    public async Task<CartViewModel?> GetCartVMAsync(string userLogin)
     {
-        var listCartVM = new List<CartViewModel>();
-        var transitionUserId = await GetTransitionUserIdAsync(userLogin);
-        var nextCarts = await GetByTransitionUserIdAsync(transitionUserId);
-        if (nextCarts.Count != 0)
-        {
-            foreach (var nextCart in nextCarts)
-            {
-                if (nextCart.UserName == null)
-                {
-                    nextCart.UserName = userLogin;
-                    await _cartsRepository.UpdateAsync(nextCart);
-                }
-            }
-        }
-        var carts = await GetByUserLoginAsync(userLogin);
-
-        foreach (var cart in carts)
-        {
-            var cartVM = Mapping.ToCartViewModel(cart);
-            listCartVM.Add(cartVM);
-        }
-        return listCartVM;
+        var cart = await GetByUserLoginAsync(userLogin);
+        var cartVM = Mapping.ToCartViewModel(cart);
+        return cartVM;
     }
 
     public async Task<bool> DecreaseAmountAsync(string userLogin, Guid productId)
@@ -151,15 +126,15 @@ public class CartService
         try
         {
             var product = await _productService.GetAsync(productId);
-            var carts = await GetByUserLoginAsync(userLogin);
-            foreach (var cart in carts)
-            {
-                cart.DecreaseCount(product);
-                if (cart.Items.Count == 0)
-                    await _cartsRepository.DeleteByLoginAsync(userLogin);
-                else
-                    await _cartsRepository.UpdateAsync(cart);
-            }
+            var cart = await GetByUserLoginAsync(userLogin);
+
+            cart!.DecreaseCount(product);
+            if (cart.Items.Count == 0)
+                await _cartsRepository.DeleteByLoginAsync(userLogin);
+            else
+                await _cartsRepository.UpdateAsync(cart);
+
+
             Log.Information($"Уменьшено количество продукта с ID: {productId}");
             return true;
         }
@@ -242,13 +217,10 @@ public class CartService
         try
         {
             var product = await _productService.GetAsync(productId);
-            var carts = await _cartsRepository.GetAsync(userId);
-            if (carts.Count != 0)
+            var cart = await _cartsRepository.GetAsync(userId);
+            if (cart != null)
             {
-                foreach (var cart in carts)
-                {
-                    await AddProductInOldCartAsync(product, cart);
-                }
+                await AddProductInOldCartAsync(product, cart);
             }
             else
             {
@@ -286,15 +258,14 @@ public class CartService
         try
         {
             var product = await _productService.GetAsync(productId);
-            var carts = await _cartsRepository.GetAsync(tempUserId);
-            foreach (var cart in carts)
-            {
-                cart.DecreaseCount(product);
-                if (cart.Items.Count > 0)
-                    await _cartsRepository.UpdateAsync(cart);
-                else
-                    await _cartsRepository.DeleteAsync(tempUserId);
-            }
+            var cart = await _cartsRepository.GetAsync(tempUserId);
+
+            cart.DecreaseCount(product);
+            if (cart.Items.Count > 0)
+                await _cartsRepository.UpdateAsync(cart);
+            else
+                await _cartsRepository.DeleteAsync(tempUserId);
+
             Log.Information($"Товар {product.Name} удален из избранного");
         }
         catch (Exception ex)
@@ -315,33 +286,26 @@ public class CartService
         }
     }
 
-    public async Task<List<CartViewModel>>? GetCartVMHttpContextAsync(string tempUserId)
+    public async Task<CartViewModel?> GetCartVMHttpContextAsync(string tempUserId)
     {
-        var carts = await _cartsRepository.GetAsync(tempUserId);
-        var cartVM = new List<CartViewModel>();
-        if (carts.Count != 0)
+        var cart = await _cartsRepository.GetAsync(tempUserId);
+        if (cart != null && cart.TransitionUserId == tempUserId)
         {
-            foreach (var cart in carts)
-            {
-                if (cart.UserName != null && cart.TransitionUserId == tempUserId)
-                {
-                    continue;
-                }
-                cartVM.Add(Mapping.ToCartViewModel(cart));
-            }
+            var cartVM = Mapping.ToCartViewModel(cart);
+            return cartVM;
+        }
+        else if (cart == null)
+        {
+            var cartVM = Mapping.ToCartViewModel(cart);
+            return cartVM;
         }
         else
-        {
-            foreach (var cart in carts)
-                cartVM.Add(Mapping.ToCartViewModel(cart));
-        }
-
-        return cartVM;
+            return null;
     }
 
-    public async Task<List<Cart>> GetByUserIdAsync(string userId)
+    public async Task<Cart?> GetByUserIdAsync(string userId)
     {
-        var carts = await _cartsRepository.GetAsync(userId);
-        return carts;
+        var cart = await _cartsRepository.GetAsync(userId);
+        return cart;
     }
 }

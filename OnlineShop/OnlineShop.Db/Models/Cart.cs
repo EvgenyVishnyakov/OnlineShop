@@ -42,9 +42,10 @@ public class Cart
 
     public void DecreaseCount(Product product)
     {
-        if (Items.Exists(x => x.Product.Id == product.Id))
+        var item = Items.First(x => x.Product.Id == product.Id);
+        if (item != null)
         {
-            if (Items.Exists(x => x.Quantity == 1))
+            if (item.Quantity == 1)
             {
                 Delete(Items.Where(x => x.Product.Id == product.Id).First());
                 return;

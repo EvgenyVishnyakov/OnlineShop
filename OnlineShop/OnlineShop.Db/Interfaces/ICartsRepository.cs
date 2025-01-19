@@ -12,21 +12,21 @@ public interface ICartsRepository
 
     Task<Cart?> GetCartByCartIdAsync(Guid cartId);
 
-    Task<List<Cart>> GetAllAsync();
+    Task<List<Cart>> GetAllAsync(string userId);
 
-    Task<List<Cart>>? GetAsync(string userId);
+    Task<Cart>? GetAsync(string userId);
 
     Task AddAttachAsync(Cart cart);
 
     Task UpdateAsync(Cart cart);
 
-    Task<List<Cart>>? GetByLoginAsync(string userLogin);
-
-    //Task<List<Cart>>? GetByIdAsync(string userId);
+    Task<Cart>? GetByLoginAsync(string userLogin);
 
     Task DeleteAsync(Guid cartId);
 
     Task<bool> DeleteAsync(string userId);
 
     Task<bool> DeleteByLoginAsync(string userLogin);
+
+    Task DeleteCartAsync(Cart cart);
 }
