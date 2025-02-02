@@ -23,7 +23,8 @@ namespace OnlineShopWebApp.Controllers
 
         public async Task<IActionResult> AddAsync(Guid cartId, string userLogin)
         {
-            var orderVM = await _orderService.AddCartAsync(cartId, userLogin);
+            var name = User.Identity!.Name;
+            var orderVM = await _orderService.AddCartAsync(cartId, name!);
             return RedirectToAction("Index", orderVM);
         }
 
