@@ -8,5 +8,7 @@ public static class Constants
 
     public const string UserRoleName = "User";
 
+    public const string SessionPerson = "TempPerson";
+
     public const string RedisCacheKey = "products_list";
 }

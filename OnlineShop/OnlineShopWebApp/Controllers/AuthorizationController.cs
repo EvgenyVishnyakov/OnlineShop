@@ -9,7 +9,6 @@ namespace OnlineShopWebApp.Controllers;
 
 public class AuthorizationController : Controller
 {
-    const string SessionPerson = "TempPerson";
     private readonly AuthorizationService _authorizationService;
     private readonly SignInManager<User> _signInManager;
     private readonly UserService _userService;
@@ -43,7 +42,7 @@ public class AuthorizationController : Controller
         if (ModelState.IsValid)
         {
             var newUser = await _authorizationService.CreateUserAsync(userRegister);
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             if (tempUserId != null)
                 newUser.TransitionUserId = Guid.Parse(tempUserId);
 
@@ -66,7 +65,7 @@ public class AuthorizationController : Controller
             ModelState.AddModelError("", "Такой логин не существует! Пройдите регистрацию");
             return View(loginModel);
         }
-        var tempUserId = HttpContext.Session.GetString(SessionPerson);
+        var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
         if (tempUserId != null)
             existingUser.TransitionUserId = Guid.Parse(tempUserId);
 
@@ -91,7 +90,7 @@ public class AuthorizationController : Controller
     public async Task<IActionResult> LogoutAsync()
     {
         await _signInManager.SignOutAsync();
-        HttpContext.Session.Remove(SessionPerson);
+        HttpContext.Session.Remove(Constants.SessionPerson);
         return RedirectToAction("Index", "Home");
     }
 }

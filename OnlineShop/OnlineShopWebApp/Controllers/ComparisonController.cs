@@ -6,7 +6,6 @@ namespace OnlineShopWebApp.Controllers;
 
 public class ComparisonController : Controller
 {
-    const string SessionPerson = "TempPerson";
     private readonly ComparisonService _comparisonService;
 
     public ComparisonController(ComparisonService comparisonService)
@@ -23,11 +22,11 @@ public class ComparisonController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             if (tempUserId == null)
             {
                 var user = new User();
-                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+                HttpContext.Session.SetString(Constants.SessionPerson, user.TransitionUserId.ToString());
             }
 
             var comparisonVM = await _comparisonService.GetComparisonVMHttpContextAsync(tempUserId);
@@ -44,13 +43,13 @@ public class ComparisonController : Controller
         }
         else
         {
-            var value = HttpContext.Session.GetString(SessionPerson);
+            var value = HttpContext.Session.GetString(Constants.SessionPerson);
             if (value == null)
             {
                 var user = new User();
-                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+                HttpContext.Session.SetString(Constants.SessionPerson, user.TransitionUserId.ToString());
             }
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             await _comparisonService.AddProductHttpContextAsync(tempUserId, productId);
             return RedirectToAction("Index", new { userLogin });
         }
@@ -65,7 +64,7 @@ public class ComparisonController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             await _comparisonService.RemoveProductHttpContextAsync(tempUserId, productId);
             return RedirectToAction("Index", new { userLogin });
         }
@@ -80,7 +79,7 @@ public class ComparisonController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             await _comparisonService.DeleteHttpContextAsync(tempUserId);
             return RedirectToAction("Index", new { userLogin });
         }

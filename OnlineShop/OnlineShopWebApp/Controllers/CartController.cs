@@ -7,7 +7,6 @@ namespace OnlineShopWebApp.Controllers;
 
 public class CartController : Controller
 {
-    const string SessionPerson = "TempPerson";
     private readonly CartService _cartService;
 
     public CartController(CartService cartService)
@@ -24,11 +23,11 @@ public class CartController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             if (tempUserId == null)
             {
                 var user = new User();
-                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+                HttpContext.Session.SetString(Constants.SessionPerson, user.TransitionUserId.ToString());
             }
 
             var cartVM = await _cartService.GetCartVMHttpContextAsync(tempUserId);
@@ -45,13 +44,13 @@ public class CartController : Controller
         }
         else
         {
-            var value = HttpContext.Session.GetString(SessionPerson);
+            var value = HttpContext.Session.GetString(Constants.SessionPerson);
             if (value == null)
             {
                 var user = new User();
-                HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+                HttpContext.Session.SetString(Constants.SessionPerson, user.TransitionUserId.ToString());
             }
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             await _cartService.AddProductHttpContextAsync(tempUserId, productId);
             return RedirectToAction("Index", new { userLogin });
         }
@@ -71,7 +70,7 @@ public class CartController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             await _cartService.RemoveProductHttpContextAsync(tempUserId, productId);
             return RedirectToAction("Index", new { userLogin });
         }
@@ -86,7 +85,7 @@ public class CartController : Controller
         }
         else
         {
-            var tempUserId = HttpContext.Session.GetString(SessionPerson);
+            var tempUserId = HttpContext.Session.GetString(Constants.SessionPerson);
             await _cartService.DeleteHttpContextAsync(tempUserId);
             return RedirectToAction("Index", new { userLogin });
         }

@@ -13,8 +13,6 @@ namespace OnlineShopWebApp.Controllers;
 
 public class HomeController : Controller
 {
-    const string SessionPerson = "TempPerson";
-
     private readonly ProductService _productService;
     private readonly RedisCacheService _redisCacheService;
 
@@ -34,11 +32,11 @@ public class HomeController : Controller
         {
             if (name == null)
             {
-                var value = HttpContext.Session.GetString(SessionPerson);
+                var value = HttpContext.Session.GetString(Constants.SessionPerson);
                 if (value == null)
                 {
                     var user = new User();
-                    HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+                    HttpContext.Session.SetString(Constants.SessionPerson, user.TransitionUserId.ToString());
                 }
             }
 
@@ -48,11 +46,11 @@ public class HomeController : Controller
         {
             if (name == null)
             {
-                var value = HttpContext.Session.GetString(SessionPerson);
+                var value = HttpContext.Session.GetString(Constants.SessionPerson);
                 if (value == null)
                 {
                     var user = new User();
-                    HttpContext.Session.SetString(SessionPerson, user.TransitionUserId.ToString());
+                    HttpContext.Session.SetString(Constants.SessionPerson, user.TransitionUserId.ToString());
                 }
             }
 

@@ -9,7 +9,6 @@ namespace OnlineShopWebApp.Service
 {
     public class OrderService
     {
-        private string _userIdTemporary = "b9f2a19a-e095-47a2-9ae1-480e8cc9cdf4";
         private readonly IOrdersRepository _ordersRepository;
         private readonly CartService _cartService;
         private readonly CartItemService _cartItemService;
@@ -31,16 +30,11 @@ namespace OnlineShopWebApp.Service
 
         public async Task<string> GetUserIdAsync(string userLogin)
         {
-            if (!string.IsNullOrEmpty(userLogin))
-            {
-                var user = await _userManager.FindByEmailAsync(userLogin);
+            var user = await _userManager.FindByEmailAsync(userLogin);
 
-                var userId = await _userManager.GetUserIdAsync(user);
+            var userId = await _userManager.GetUserIdAsync(user);
 
-                return userId;
-            }
-            else
-                return _userIdTemporary;
+            return userId;
         }
 
         public async Task<List<OrderViewModel>> GetOrdersAsync()
