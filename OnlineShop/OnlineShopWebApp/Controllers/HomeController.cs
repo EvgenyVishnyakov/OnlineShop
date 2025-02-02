@@ -58,7 +58,6 @@ public class HomeController : Controller
 
             var products = await _productService.GetAllAsync();
             productsVM = Mapping.ToProductViewModels(products);
-            //return View(productsVM);
             var productsJson = JsonSerializer.Serialize(productsVM);
             await _redisCacheService.SetAsync(Constants.RedisCacheKey, productsJson);
         }
