@@ -27,5 +27,7 @@ namespace OnlineShopWebApp.ViewModels
         public string Category { get; set; }
 
         public double Grade { get; set; }
+
+        public Rating Rating { get; set; }
     }
 }

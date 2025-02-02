@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -7,8 +8,10 @@ using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repository;
 using OnlineShopWebApp.Helpers;
+using OnlineShopWebApp.Redis;
 using OnlineShopWebApp.Service;
 using Serilog;
+using StackExchange.Redis;
 
 
 
@@ -28,6 +31,36 @@ try
         .Enrich.WithProperty("ApplicationName", "Online Shop");
     });
     builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connection));
+
+    var redisConfiguration = ConfigurationOptions.Parse(builder.Configuration.GetSection("Redis:ConnectionString").Value);
+    redisConfiguration.AbortOnConnectFail = false;
+    redisConfiguration.ConnectTimeout = 5000; // Увеличьте таймаут до 5 секунд
+
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    {
+        try
+        {
+            var multiplexer = ConnectionMultiplexer.Connect(redisConfiguration);
+            multiplexer.ConnectionFailed += (sender, args) =>
+            {
+                Console.WriteLine($"Connection failed: {args.Exception}");
+            };
+            multiplexer.ErrorMessage += (sender, args) =>
+            {
+                Console.WriteLine($"Error message: {args.Message}");
+            };
+            return multiplexer;
+        }
+        catch (RedisConnectionException ex)
+        {
+            Console.WriteLine($"Redis connection error: {ex.Message}");
+            throw;
+        }
+    });
+
+    builder.Services.AddSingleton<RedisCacheService>();
+
+
 
     // Add services to the container.
     builder.Services.AddControllersWithViews();
@@ -90,6 +123,12 @@ try
     builder.Services.AddAuthentication("Cookies");
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => options.LoginPath = "/login");
+
+    builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
     var app = builder.Build();
 
     app.UseSession();

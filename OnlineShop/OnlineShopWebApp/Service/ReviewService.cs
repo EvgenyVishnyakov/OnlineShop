@@ -23,7 +23,7 @@ namespace OnlineShopWebApp.Service
             _ratingDbRepository = ratingDbRepository;
         }
 
-        public async Task<List<Review?>> GetAllByProductIdAsync(Guid productId)
+        public async Task<List<Review?>> GetReviewsByProductIdAsync(Guid productId)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace OnlineShopWebApp.Service
 
         public async Task AddAsync(AddReviewDTO addReview)
         {
-            var reviews = await GetAllByProductIdAsync(addReview.ProductId);
+            var reviews = await GetReviewsByProductIdAsync(addReview.ProductId);
             var product = await _productService.GetAsync(addReview.ProductId);
 
             var reviewDb = Mapping.CreateReview(addReview);
@@ -101,6 +101,20 @@ namespace OnlineShopWebApp.Service
 
                 await _ratingDbRepository.AddAsync(rating);
                 return rating;
+            }
+        }
+
+        public async Task<Rating?> GetRatingByProductIdAsync(Guid productId)
+        {
+            try
+            {
+                var rating = await _ratingDbRepository.GetRating(productId);
+                return rating;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Ошибка получения рейтинга для продукта по Id {productId}");
+                return null;
             }
         }
     }

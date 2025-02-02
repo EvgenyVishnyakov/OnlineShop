@@ -23,7 +23,7 @@ public class ReviewController : Controller
 
     public async Task<ActionResult> GetByProductIdAsync(Guid productId, string userLogin)
     {
-        var reviews = await _reviewService.GetAllByProductIdAsync(productId);
+        var reviews = await _reviewService.GetReviewsByProductIdAsync(productId);
         if (reviews.Count != 0)
         {
             return View(Mapping.ToReviewViewModels(reviews));
