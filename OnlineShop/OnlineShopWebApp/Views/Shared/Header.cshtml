@@ -1,4 +1,4 @@
-﻿header>
+﻿<header>
     <div class="row">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-navbar-light  border-bottom box-shadow mb-3" style="background-color: #ffc766">
             <div class="container-fluid">
@@ -43,12 +43,11 @@
                         </li>
                         <li class="nav-item">
                             <form class="d-flex" role="search">
-                                <input name="name" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+                                <input name="searchQuery" class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
                                 <button class="btn btn-outline-primary" type="submit"
                                         asp-area=""
                                         asp-controller="Product"
-                                        asp-action="FindName">Поиск
-                                    </button>
+                                    asp-action="FindProduct">Поиск</button>
                             </form>
                         </li>
                         <li class="nav-item">

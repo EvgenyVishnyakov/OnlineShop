@@ -75,10 +75,11 @@ public class ProductService
         return productVM;
     }
 
-    public async Task<Product?> GetAsync(string name)
+    public async Task<Product?> GetAsync(string searchQuery)
     {
         var products = await GetAllAsync();
-        return products.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
+        return products.FirstOrDefault(x => x.Name.ToLower() == searchQuery.ToLower() || x.Category.ToLower() ==
+            searchQuery.ToLower());
     }
 
     public async Task EditAsync(EditProductViewModel productVM)

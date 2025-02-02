@@ -8,6 +8,7 @@ using OnlineShopWebApp.Models;
 using OnlineShopWebApp.Redis;
 using OnlineShopWebApp.Service;
 using OnlineShopWebApp.ViewModels;
+using X.PagedList.Extensions;
 
 namespace OnlineShopWebApp.Controllers;
 
@@ -22,8 +23,12 @@ public class HomeController : Controller
         _redisCacheService = redisCacheService;
     }
 
-    public async Task<IActionResult> IndexAsync()
+    public async Task<IActionResult> IndexAsync(string searchString, int? page)
     {
+        var pageNumber = page ?? 1;
+        var pageSize = 2;
+        ViewBag.SearchString = searchString;
+
         var name = User.Identity?.Name;
         var cacheProducts = await _redisCacheService.TryGetAsync(Constants.RedisCacheKey);
         List<ProductViewModel> productsVM;
@@ -41,6 +46,8 @@ public class HomeController : Controller
             }
 
             productsVM = JsonSerializer.Deserialize<List<ProductViewModel>>(cacheProducts)!;
+            var productListPaggin = productsVM.ToPagedList(pageNumber, pageSize);
+            return View(productListPaggin);
         }
         else
         {
@@ -58,8 +65,10 @@ public class HomeController : Controller
             productsVM = Mapping.ToProductViewModels(products);
             var productsJson = JsonSerializer.Serialize(productsVM);
             await _redisCacheService.SetAsync(Constants.RedisCacheKey, productsJson);
+            var productListPaggin = productsVM.ToPagedList(pageNumber, pageSize);
+            return View(productListPaggin);
         }
-        return View(productsVM);
+        //return View(productsVM);
     }
 
     public IActionResult Contacts()
