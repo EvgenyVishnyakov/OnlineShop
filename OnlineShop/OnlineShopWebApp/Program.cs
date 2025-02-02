@@ -34,7 +34,7 @@ try
 
     var redisConfiguration = ConfigurationOptions.Parse(builder.Configuration.GetSection("Redis:ConnectionString").Value);
     redisConfiguration.AbortOnConnectFail = false;
-    redisConfiguration.ConnectTimeout = 5000; // Увеличьте таймаут до 5 секунд
+    redisConfiguration.ConnectTimeout = 5000;
 
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     {
