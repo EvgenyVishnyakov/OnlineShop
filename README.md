@@ -13,10 +13,11 @@
 <img src="https://github.com/user-attachments/assets/fad00963-34be-44a1-b618-fa4d4bc4bbcb" />
 
 <h2>Архитектурная часть</h2>
+<p><em>Работа построена через интерфейсы, организацию работы через репозитории, сервисы, viewModel </p>
 <img src="https://github.com/user-attachments/assets/a28a4009-ac47-4d9c-bfb2-3c2d3718afec" />
 <h4>Технология ASP</h4>
 <h4>Валидация данных</h4>
-<p>Валидация на стороне клиента и на сервере</p>
+<p><em></em>Валидация на стороне клиента и на сервере</p>
 
     public class Authorization
     {
@@ -99,7 +100,7 @@
 <img src="https://github.com/user-attachments/assets/72b86694-2285-49f9-8e88-62be0f0cc6e9" />
 
 <h4>Работа с БД</h4>
-<p>Использована БД MySQL в данном проекте. В данном проекте научился работать с миграциями, использовать Fluent API при организации работы с моделями</p>
+<p><em></em>Использована БД MySQL в данном проекте. В данном проекте научился работать с миграциями, использовать Fluent API при организации работы с моделями</p>
 <img src="https://github.com/user-attachments/assets/7cef0fec-1c57-47d0-86ba-c8a3b227cc12" />
 
     public void Configure(EntityTypeBuilder<Cart> entityTypeBuilder)
@@ -179,13 +180,12 @@
 
 <h4>Работа с HTML, CSS, Bootstrap</h4>
 
+<h4>Дополнительные технологии</h4>
+<p><em></em>Пагинация</p>
+<p><em></em>Ассинхронное программирование</p>
+<p><em></em>Redis</p>
+<p><em></em>Работа в Докере</p>
 
-
-
-<h2>Немного видео из игры</h2>
-
-<a href="https://github.com/user-attachments/assets/d20e4a77-47db-4a6b-b80a-0049d21bfd77">Скачать видео</a>
- 
 <div class="text" align="center">
     <h1>Спасибо за внимание!</h2>
 </div>
