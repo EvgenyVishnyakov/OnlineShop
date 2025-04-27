@@ -13,7 +13,7 @@
 <img src="https://github.com/user-attachments/assets/fad00963-34be-44a1-b618-fa4d4bc4bbcb" />
 
 <h3>Архитектурная часть</h3>
-<img src="https://github.com/user-attachments/assets/c9da1e9f-2c1f-4989-93e1-8c8dc38a4a06" />
+<img src="https://github.com/user-attachments/assets/a28a4009-ac47-4d9c-bfb2-3c2d3718afec" />
 <p>Работа выполнена с использованием общей бибилиотеки в коде</p>
 <p>При разработки данной игры я прошел несколько важных шагов в изучении языка с#</p>
 <ul>
