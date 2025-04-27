@@ -12,14 +12,6 @@
 <p><em>Реализовано unit тестирование, а также работа с API через Swagger </p>
 <img src="https://github.com/user-attachments/assets/fad00963-34be-44a1-b618-fa4d4bc4bbcb" />
 
-
-<h3>Правила игры</h3>
-<img src="https://github.com/user-attachments/assets/8e937d5e-cf31-42c4-85e1-fb5a768d6b19" />
-<br />
-<img src="https://github.com/user-attachments/assets/b66a1a28-428d-450c-bce6-2bf6d52f1b54" />
-<br />
-<p>По итогам игры участник игры получает <b>"шуточный"</b> итог игры, над которым все могут посмеяться</p>
-<p>Взяв на себя функции администратора пользователь может изменять и дополнять вопросы для изменения игры</p>
 <h3>Архитектурная часть</h3>
 <img src="https://github.com/user-attachments/assets/c9da1e9f-2c1f-4989-93e1-8c8dc38a4a06" />
 <p>Работа выполнена с использованием общей бибилиотеки в коде</p>
