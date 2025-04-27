@@ -3,7 +3,8 @@
 </div>
 <h3>Краткое объяснение</h3>
 <p><em>Шуточная</em> игра для непринужденного время препровождения как одному так и в компании друзей </p>
-<img src="https://github.com/user-attachments/assets/e5aadd0f-7b7c-4cae-a08e-8dac408a44b7" />
+
+<img src="https://github.com/user-attachments/assets/ca2907c0-4262-47ed-a176-837d4c91bd1c" />
 <h3>Правила игры</h3>
 <img src="https://github.com/user-attachments/assets/8e937d5e-cf31-42c4-85e1-fb5a768d6b19" />
 <br />
