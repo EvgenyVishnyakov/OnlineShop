@@ -14,7 +14,41 @@
 
 <h3>Архитектурная часть</h3>
 <img src="https://github.com/user-attachments/assets/a28a4009-ac47-4d9c-bfb2-3c2d3718afec" />
-<p>Работа выполнена с использованием общей бибилиотеки в коде</p>
+<h2>Технология ASP</h2>
+<h2>Валидация данных</h2>
+<p>Валидация на стороне клиента и на сервере</p>
+
+    public class Authorization
+    {
+        [Required(ErrorMessage = "Укажите Ваш логин")]
+        public string Login { get; set; }
+
+        [Required(ErrorMessage = "Укажите пароль")]
+        public string Password { get; set; }
+    }
+    public class Registration
+    {
+        [Required(ErrorMessage = "Введите Ваш e-mail")]
+        [EmailAddress(ErrorMessage = "Вы ввели неккоретный адрес почты")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Введите номер телефона")]
+        [Phone(ErrorMessage = "Указан неккоректный номер телефона")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Укажите пароль")]
+        [StringLength(15, MinimumLength = 11, ErrorMessage = "Длина пароля должна быть от 11 до 15 символов")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Повторите пароль")]
+        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
+        public string ConfirmPassword { get; set; }
+    }
+<h2>Использование токенов при авторизации и аутентификации </h2>
+
+    
+<h2>Логирование данных</h2>
+
 <p>При разработки данной игры я прошел несколько важных шагов в изучении языка с#</p>
 <ul>
     <li>Использование знаний по ООП для разделения сущностей и логики работы кода</li>
