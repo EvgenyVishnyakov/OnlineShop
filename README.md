@@ -14,8 +14,8 @@
 
 <h3>Архитектурная часть</h3>
 <img src="https://github.com/user-attachments/assets/a28a4009-ac47-4d9c-bfb2-3c2d3718afec" />
-<h2>Технология ASP</h2>
-<h2>Валидация данных</h2>
+<h4>Технология ASP</h4>
+<h4>Валидация данных</h4>
 <p>Валидация на стороне клиента и на сервере</p>
 
     public class Authorization
@@ -44,10 +44,59 @@
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string ConfirmPassword { get; set; }
     }
-<h2>Использование токенов при авторизации и аутентификации </h2>
+<h4>Использование токенов при авторизации и аутентификации </h4>
 
-    
-<h2>Логирование данных</h2>
+        public class JWTMiddleware
+        {
+            private readonly RequestDelegate _next;
+            private readonly IConfiguration _configuration;
+
+        public JWTMiddleware(RequestDelegate next, IConfiguration configuration)
+        {
+            _next = next;
+            _configuration = configuration;
+        }
+
+        public async Task InvokeAsync(HttpContext context, UserManager<User> userManager)
+        {
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
+            if (token != null)
+            {
+                await AttachAccountToContextAsync(context, token, userManager);
+            }
+
+            await _next(context);
+        }
+
+        private async Task AttachAccountToContextAsync(HttpContext context, string token, UserManager<User> userManager)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF32.GetBytes(_configuration["Jwt:Key"]);
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidateIssuer = true,
+                    ValidAudience = _configuration["Jwt:Audience"],
+                    ValidateAudience = true,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var userEmail = jwtToken.Claims.First(x => x.Type == "email").Value;
+                var user = await userManager.FindByEmailAsync(userEmail);
+                context.Items["User"] = user;
+            }
+            catch { }
+        }
+    }
+   
+<h4>Логирование данных</h4>
+<img src="https://github.com/user-attachments/assets/72b86694-2285-49f9-8e88-62be0f0cc6e9" />
 
 <p>При разработки данной игры я прошел несколько важных шагов в изучении языка с#</p>
 <ul>
